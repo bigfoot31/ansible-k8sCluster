@@ -1,0 +1,18 @@
+RPM_YUM_UTILS_LIST:
+  - 'libxml2-python-2.9.1-6.el7_2.3.x86_64.rpm'
+  - 'python-deltarpm-3.6-3.el7.x86_64.rpm'
+  - 'deltarpm-3.6-3.el7.x86_64.rpm'
+  - 'python-deltarpm-3.6-3.el7.x86_64.rpm'
+  - 'createrepo-0.9.9-28.el7.noarch.rpm'
+RPM_VSFTPD: 'vsftpd-3.0.2-22.el7.x86_64.rpm '
+
+YUM_LOCAL_REPO_CONFIG_PATH: '/etc/yum.repos.d/localrepo.repo '
+YUM_LOCAL_REPO_CONFIG_TEMPLATE: '../templates/template_yum_repo_config.j2'
+YUM_LOCAL_REPO_SRC: '../files'
+YUM_LOCAL_REPO_FTP_FOLDER: '/var/ftp/pub'
+ 
+YUM_LOCAL_REPO_CONFIG_ID: 'localrepo'
+YUM_LOCAL_REPO_CONFIG_NAME: 'Hotscan Repository'
+YUM_LOCAL_REPO_CONFIG_BASEURL: 'ftp://192.168.163.201/pub'
+YUM_LOCAL_REPO_CONFIG_GPGCHECK: '0'
+YUM_LOCAL_REPO_CONFIG_ISENABLED: '1'
