@@ -1,8 +1,0 @@
-- hosts: local
-  become_user: root
-  become: yes
-  connection: local
-  gather_facts: yes
-  roles:
-    - server_admin
-    - common
