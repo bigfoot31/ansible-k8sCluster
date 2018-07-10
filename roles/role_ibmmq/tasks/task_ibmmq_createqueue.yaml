@@ -1,0 +1,34 @@
+- name: create queue manager
+  shell:
+    chdir: "{{ IBMMQ_BIN_FOLDER }}"
+    cmd: crtmqm -q "{{ IBMMQ_QMGR_NAME }}"
+- name: start queue manager
+  shell:
+    chdir: "{{ IBMMQ_BIN_FOLDER }}"
+    cmd: strmqm "{{ IBMMQ_QMGR_NAME }}"
+- name: create command text file
+  blockinfile:
+    path: "IBMMQ_TEMP_FILE_PATH"
+    marker: ""
+    create: yes
+    content: |
+      DEFINE QLOCAL({{ IBMMQ_QUEUE_1 }}_{{ IBMMQ_QMGR_PORT }}) 
+      DEFINE QLOCAL({{ IBMMQ_QUEUE_2 }}_{{ IBMMQ_QMGR_PORT }}) 
+      DEFINE QLOCAL({{ IBMMQ_QUEUE_3 }}_{{ IBMMQ_QMGR_PORT }}) 
+      DEFINE QLOCAL({{ IBMMQ_QUEUE_4 }}_{{ IBMMQ_QMGR_PORT }}) 
+      DEFINE QLOCAL({{ IBMMQ_QUEUE_4 }}_{{ IBMMQ_QMGR_PORT }})
+      DEFINE CHANNEL({{ IBMMQ_QMGR_CHANNEL }}) CHLTYPE(SVRCONN) TRPTYPE(TCP) MCAUSER('mqm')
+      ALTER QMGR CHLAUTH(DISABLED)
+      SET CHLAUTH({{ IBMMQ_QMGR_NAME }}) TYPE(BLOCKUSER) USERLIST('nobody')
+- name: run commands to setup queue
+  shell:
+    chdir: "{{ IBMMQ_BIN_FOLDER }}"
+    cmd: runmqsc < "IBMMQ_TEMP_FILE_PATH"
+- name: cleanup
+  shell:
+    chdir: "{{ IBMMQ_BIN_FOLDER }}"
+    cmd: rm "IBMMQ_TEMP_FILE_PATH"
+- name: run the queue
+  shell:
+    chdir: "{{ IBMMQ_BIN_FOLDER }}"
+    cmd: nohup runmqlsr -m "{{ IBMMQ_QMGR_NAME }}" -t tcp -p "{{ IBMMQ_QMGR_PORT }}" & 

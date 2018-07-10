@@ -1,0 +1,2 @@
+- import_tasks: task_ibmmq_createqueue.yaml
+- import_tasks: task_ibmmq_installation.yaml

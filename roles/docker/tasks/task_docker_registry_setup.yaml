@@ -1,0 +1,33 @@
+- name: install ansible-docker module dependencies
+  yum:
+    name: "{{ item }}"
+    update_cache: no
+    disablerepo: "*"
+    enablerepo: "{{ YUM_LOCAL_REPO_ID }}"
+  with_items:
+    - "{{ ANSIBLE_DOCKER_DEPENDENCY_LIST}}"
+- name: create pip config folder
+  file:
+    path: "{{ PIP_REPO_CONF_PATH }}"
+    state: directory
+- name: pip configuration
+  template:
+    dest: "{{ PIP_REPO_CONF_PATH }}"/pip.conf
+    src:
+- name: install docker-py
+  pip:
+    name: docker-py
+    editable: yes
+- name: docker pull registry image
+  docker_image:
+    name: registry
+    tag: 2	
+    load_path: "{{ DOCKER_HUB_LOCATION }}/{{ DOCKER_IMAGE_REGISTRY_TAR }}"
+- name: docker run registry image
+  docker_container:
+    name: registry
+    image: registry:2
+    state: started
+    restart_policy: always
+    ports:
+     - "{{ DOCKER_REGISTRY_PORT_MAPPING }}"
