@@ -1,0 +1,2 @@
+- import_tasks: task_docker_registry_setup.yml
+- import_tasks: task_docker_setup.yml

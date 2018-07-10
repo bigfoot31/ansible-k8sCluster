@@ -1,0 +1,12 @@
+YUM_LOCAL_REPO_CONFIG_ID: 'localrepo'
+YUM_SQUID_DEPENDENCY_LIST:
+  - squid
+  - httpd-tools
+
+SQUID_USER: 'hotscan'
+SQUID_PASSWORD: 'banana12'
+SQUID_PASSWD_PATH: '/etc/squid/passwd'
+SQUID_PASSWORD_HASH_SCHEME: 'apr_md5_crypt'
+SQUID_CONF_PATH: '/etc/squid/squid.conf'
+SQUID_IP_RANGE: '192.168.163.0'
+SQUID_PORT: 3127

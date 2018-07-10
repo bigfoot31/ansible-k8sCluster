@@ -1,0 +1,2 @@
+- import_tasks: task_change_hostname.yml
+- import_tasks: task_convert_staticip.yml

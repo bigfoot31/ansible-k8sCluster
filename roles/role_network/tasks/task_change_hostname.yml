@@ -1,0 +1,4 @@
+- name: edit hostname
+  shell: hostnamectl set-hostname "{{ HOSTNAME }}"
+  become: yes
+  become_user: ansible
