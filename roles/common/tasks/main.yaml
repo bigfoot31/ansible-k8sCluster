@@ -1,0 +1,2 @@
+- include_tasks: tasks_network_setup.yaml
+- include_tasks: tasks_docker_setup.yaml

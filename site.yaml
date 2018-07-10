@@ -1,0 +1,2 @@
+- include: playbooks/playbook_server_admin.yaml
+- include: playbooks/playbook_server_node.yaml

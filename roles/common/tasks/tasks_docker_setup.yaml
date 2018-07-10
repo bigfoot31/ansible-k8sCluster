@@ -1,0 +1,13 @@
+- name: Install necessary libraries and utilitites
+  yum:
+    name: "{{ item }}"
+    update_cache: no
+    disablerepo: "*"
+    enablerepo: localrepo
+  with_items:
+    - docker-ce
+- name: start docker service
+  systemd:
+    name: docker
+    state: started
+    enabled: yes

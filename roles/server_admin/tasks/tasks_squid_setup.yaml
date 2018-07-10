@@ -1,0 +1,55 @@
+- name: Install necessary libraries and utilitites
+  yum:
+    name: "{{ item }}"
+    update_cache: no
+    disablerepo: "*"
+    enablerepo: localrepo
+  with_items:
+    - squid
+    - httpd-tools
+- name: create passwdfile for squid proxy
+  htpasswd:
+    path: "{{ SQUID_PASSWD_PATH }}"
+    name: "{{ SQUID_USER }}"
+    password: "{{ SQUID_PASSWORD }}"
+    crypt_scheme: apr_md5_crypt
+    owner: root
+    group: root
+    mode: 0604
+- name: open squid port in firewalld
+  firewalld:
+    port: "{{ SQUID_PORT }}/tcp"
+    zone: public
+    permanent: true
+    state: enabled
+- name: restart firewall service
+  systemd:
+    name: firewalld
+    state: restarted
+- name: edit squid conf file - add ip range
+  replace:
+    path: "{{ SQUID_CONF_PATH }}"
+    regexp: '192\.168\.0\.0/16'
+    replace: '{{ SQUID_IP_RANGE }}'
+- name: edit squid conf file - add squid port
+  replace:
+    path: "{{ SQUID_CONF_PATH }}"
+    regexp: '^http_port\s+3128'
+    replace: 'http_port {{ SQUID_PORT }}'
+- name: edit squid conf file - add authentication
+  blockinfile:
+    path: "{{ SQUID_CONF_PATH }}"
+    state: present
+    marker: ""
+    insertafter: 'acl CONNECT method CONNECT'
+    content: |
+      auth_param basic program /usr/lib64/squid/basic_ncsa_auth {{ SQUID_PASSWD_PATH }}
+      auth_param basic realm proxy
+      acl authenticated proxy_auth REQUIRED
+      http_access allow authenticated
+- name: start squid service
+  service:
+    name: squid
+    state: started
+    enabled: yes
+
