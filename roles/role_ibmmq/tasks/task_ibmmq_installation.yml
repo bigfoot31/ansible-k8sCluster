@@ -1,35 +1,35 @@
 - name: install libraries (only for centos 7)
   yum:
-    name: "{{ item }}"
+    name: '{{ item }}'
     state: present
   with_items:
-    - "{{ RPM_IBMMQ_DEPENDENCY_LIST }}"
+    - '{{ IBMMQ.RPM_DEPENDENCY }}'
   become: yes
   become_user: ansible
 - name: install ibm rpm
   file:
-    path: "{{ IBMMQ_WD }}"
+    path: '{{ IBMMQ.WD }}'
     state: directory
   become: yes
   become_user: ansible
 - name: untar ibmmq src code
   unarchive:
-    src: "{{ IBMMQ_SRC }}"
-    dest: "{{ IBMMQ_WD }}"
+    src: '{{ IBMMQ.SRC }}'
+    dest: '{{ IBMMQ.WD }}'
   become: yes
   become_user: ansible
 - name: run ibm mq license
   shell: 
-    cmd: echo "1" | ./mqlicense.sh --stdin && ./crtmqpkg mqmpkg
-    chdir: "{{ IBMMQ_WD }}"
+    cmd: echo '1' | ./mqlicense.sh --stdin && ./crtmqpkg mqmpkg
+    chdir: '{{ IBMMQ.WD }}'
   become: yes
   become_user: ansible
 - name: install ibm rpm
   yum:
-    name: "{{IBMMQ_WD}}/{{item}}"
+    name: '{{ IBMMQ.WD }}/{{ item }}'
     state: present
   with_items:
-    - "{{ RPM_IBMMQ_LIST }}"
+    - '{{ IBMMQ.RPM }}'
   become: yes
   become_user: ansible
 - name: run other commands
@@ -39,6 +39,6 @@
 - name: clean up
   shell:
     cmd: rm -rf *
-    chdir: "{{ IBMMQ_WD }}"
+    chdir: '{{ IBMMQ.WD }}'
   become: yes
   become_user: ansible

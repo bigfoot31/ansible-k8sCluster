@@ -1,20 +1,20 @@
 - name: install squid
   yum:
-    name: "{{ item }}"
+    name: '{{ item }}'
     update_cache: no
-    disablerepo: "*"
-    enablerepo: "{{ YUM_LOCAL_REPO_CONFIG_ID }}"
+    disablerepo: '*'
+    enablerepo: '{{ YUM_LOCAL_REPO.CONFIG.ID }}'
   with_items:
-    - "{{ YUM_SQUID_DEPENDENCY_LIST }}"
+    - '{{ SQUID.YUM_DEPENDENCY }}'
   become: yes
   become_user: ansible
 
 - name: create passwdfile for squid proxy
   htpasswd:
-    path: "{{ SQUID_PASSWD_PATH }}"
-    name: "{{ SQUID_USER }}"
-    password: "{{ SQUID_PASSWORD }}"
-    crypt_scheme: "{{ SQUID_PASSWORD_HASH_SCHEME }}"
+    path: '{{ SQUID.PASSWD.PATH }}'
+    name: '{{ SQUID.USER }}'
+    password: '{{ SQUID.PASSWORD }}'
+    crypt_scheme: '{{ SQUID.PASSWD.HASH_SCHEME }}'
     owner: root
     group: root
     mode: 0604
@@ -23,7 +23,7 @@
 
 - name: open squid port in firewalld
   firewalld:
-    port: "{{ SQUID_PORT }}/tcp"
+    port: '{{ SQUID.PORT }}/tcp'
     zone: public
     permanent: true
     state: enabled
@@ -39,28 +39,28 @@
 
 - name: edit squid conf file - add ip range
   replace:
-    path: "{{ SQUID_CONF_PATH }}"
+    path: '{{ SQUID.CONF_PATH }}'
     regexp: '192\.168\.0\.0/16'
-    replace: '{{ SQUID_IP_RANGE }}'
+    replace: '{{ SQUID.IP_RANGE }}'
   become: yes
   become_user: ansible
 
 - name: edit squid conf file - add squid port
   replace:
-    path: "{{ SQUID_CONF_PATH }}"
+    path: '{{ SQUID.CONF_PATH }}'
     regexp: '^http_port\s+3128'
-    replace: 'http_port {{ SQUID_PORT }}'
+    replace: 'http_port {{ SQUID.PORT }}'
   become: yes
   become_user: ansible
 
 - name: edit squid conf file - add authentication
   blockinfile:
-    path: "{{ SQUID_CONF_PATH }}"
+    path: '{{ SQUID.CONF_PATH }}'
     state: present
-    marker: ""
+    marker: ''
     insertafter: 'acl CONNECT method CONNECT'
     content: |
-      auth_param basic program /usr/lib64/squid/basic_ncsa_auth {{ SQUID_PASSWD_PATH }}
+      auth_param basic program /usr/lib64/squid/basic_ncsa_auth {{ SQUID.PASSWD.PATH }}
       auth_param basic realm proxy
       acl authenticated proxy_auth REQUIRED
       http_access allow authenticated

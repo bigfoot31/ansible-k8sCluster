@@ -1,14 +1,14 @@
 - name: add ip to inmemory inventory file
   add_host:
-    hostname: 192.168.163.5
+    hostname: '{{ NETWORK.TEMP_IP }}'
     groups: temp
     delegate_to: 127.0.0.1
   become: no
 
 - name: convert dhcp to static
   template:
-    dest: "{{ NETWORK_IP_CONFIG_PATH }}"
-    src: "{{ NETWORK_IP_CONFIG_TEMPLATE }}"
+    dest: '{{ NETWORK.CONFIG.PATH }}'
+    src: '{{ NETWORK.CONFIG.TEMPLATE }}'
   become: yes
   become_user: ansible
 

@@ -1,0 +1,2 @@
+YUM_LOCAL_REPO:
+  BASEURL: ftp://192.168.163.201/pub

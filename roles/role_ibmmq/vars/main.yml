@@ -1,21 +1,23 @@
-RPM_IBMMQ_DEPENDENCY_LIST:
-  - pax
-  - rpm-build
-RPM_IBMMQ_LIST:
-  - MQSeriesRuntime-7.5.0-2.x86_64.rpm
-  - MQSeriesClient-7.5.0-2.x86_64.rpm
-  - MQSeriesSDK-7.5.0-2.x86_64.rpm
-  - MQSeriesServer-7.5.0-2.x86_64.rpm
-IBMMQ_WD: /tmp/ibmmq
-IBMMQ_SRC: ../files/WS_MQ_LINUX_ON_X86_64_7.5.0.2_IMG.tar
-IBMMQ_BIN_FOLDER: /opt/mqm/bin
-
-
-IBMMQ_QMGR_NAME: DOCKER
-IBMMQ_QMGR_CHANNEL: DOCKER_CHANNEL
-IBMMQ_QMGR_PORT: 30001
-IBMMQ_QUEUE_1: HOTSCANINQ
-IBMMQ_QUEUE_2: HOTSCANOUTQ1
-IBMMQ_QUEUE_3: HOTSCANOUTQ2
-IBMMQ_QUEUE_4: HOTSCANRPLYQ
-IBMMQ_QUEUE_4: MQ_BACKOUTQ1
+IBMMQ:
+  WD: /tmp/ibmmq   
+  SRC: ../files/WS_MQ_LINUX_ON_X86_64_7.5.0.2_IMG.tar
+  BIN: /opt/mqm/bin
+  TEMP_FILE_PATH: ~/.channel.in
+  QMGR:
+    NAME: DOCKER
+    CHANNEL: DOCKER_CHANNEL
+    PORT: 30001
+  QUEUE:
+    1: HOTSCANINQ
+    2: HOTSCANOUTQ1
+    3: HOTSCANOUTQ2
+    4: HOTSCANRPLYQ
+    5: MQ_BACKOUTQ1
+  RPM_DEPENDENCY:
+    - pax
+    - rpm-build
+  RPM:
+    - MQSeriesRuntime-7.5.0-2.x86_64.rpm
+    - MQSeriesClient-7.5.0-2.x86_64.rpm
+    - MQSeriesSDK-7.5.0-2.x86_64.rpm
+    - MQSeriesServer-7.5.0-2.x86_64.rpm

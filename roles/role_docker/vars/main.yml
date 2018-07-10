@@ -1,11 +1,8 @@
-YUM_LOCAL_REPO_ID: 'localrepo'
-ANSIBLE_DOCKER_DEPENDENCY_LIST:
-  - epel-release
-  - python-setuptools
-  - python-pip 
-PIP_REPO_CONF_PATH: '~/.pip'
-PIP_REPO_PATH: '~/pip_repo'
-
-DOCKER_HUB_LOCATION:
-DOCKER_IMAGE_REGISTRY_TAR: 'registry.tar'
-DOCKER_REGISTRY_PORT_MAPPING: '5000:5000'
+DOCKER:
+  HUB_LOCATION: ../files/
+  IMAGE_REGISTRY_TAR: registry.tar
+  REGISTRY_PORT_MAPPING: 5000:5000
+  ANSIBLE_DEPENDENCY:
+    - epel-release
+    - python-setuptools
+    - python-pip 

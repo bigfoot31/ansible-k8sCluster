@@ -1,11 +1,11 @@
 - name: create pip config folder
   file:
-    path: "{{ PIP_REPO_CONF_PATH }}"
+    path: '{{ PIP.REPO.CONF.PATH }}'
     state: directory
   become: no
 
 - name: pip configuration
   template:
-    dest: "{{ PIP_REPO_CONF_PATH }}"/pip.conf
-    src: "{{ PIP_REPO_CONF_TEMPLATE }}"
+    dest: '{{ PIP.REPO.CONF.PATH }}'/pip.conf
+    src: '{{ PIP.REPO.CONF.TEMPLATE }}'
   become: no

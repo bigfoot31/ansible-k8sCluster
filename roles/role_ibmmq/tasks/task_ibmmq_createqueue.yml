@@ -1,51 +1,51 @@
 - name: create queue manager
   shell:
-    chdir: "{{ IBMMQ_BIN_FOLDER }}"
-    cmd: crtmqm -q "{{ IBMMQ_QMGR_NAME }}"
+    chdir: '{{ IBMMQ.BIN }}'
+    cmd: crtmqm -q '{{ IBMMQ.QMGR.NAME }}'
   become: yes
   become_user: mqm
 
 - name: start queue manager
   shell:
-    chdir: "{{ IBMMQ_BIN_FOLDER }}"
-    cmd: strmqm "{{ IBMMQ_QMGR_NAME }}"
+    chdir: '{{ IBMMQ.BIN }}'
+    cmd: strmqm '{{ IBMMQ.QMGR.NAME }}'
   become: yes
   become_user: mqm
 
 - name: create command text file
   blockinfile:
-    path: "IBMMQ_TEMP_FILE_PATH"
-    marker: ""
+    path: 'IBMMQ.TEMP_FILE_PATH'
+    marker: ''
     create: yes
     content: |
-      DEFINE QLOCAL({{ IBMMQ_QUEUE_1 }}_{{ IBMMQ_QMGR_PORT }}) 
-      DEFINE QLOCAL({{ IBMMQ_QUEUE_2 }}_{{ IBMMQ_QMGR_PORT }}) 
-      DEFINE QLOCAL({{ IBMMQ_QUEUE_3 }}_{{ IBMMQ_QMGR_PORT }}) 
-      DEFINE QLOCAL({{ IBMMQ_QUEUE_4 }}_{{ IBMMQ_QMGR_PORT }}) 
-      DEFINE QLOCAL({{ IBMMQ_QUEUE_4 }}_{{ IBMMQ_QMGR_PORT }})
-      DEFINE CHANNEL({{ IBMMQ_QMGR_CHANNEL }}) CHLTYPE(SVRCONN) TRPTYPE(TCP) MCAUSER('mqm')
+      DEFINE QLOCAL({{ IBMMQ.QUEUE.1 }}_{{ IBMMQ.QMGR.PORT }}) 
+      DEFINE QLOCAL({{ IBMMQ.QUEUE.2 }}_{{ IBMMQ.QMGR.PORT }}) 
+      DEFINE QLOCAL({{ IBMMQ.QUEUE.3 }}_{{ IBMMQ.QMGR.PORT }}) 
+      DEFINE QLOCAL({{ IBMMQ.QUEUE.4 }}_{{ IBMMQ.QMGR.PORT }}) 
+      DEFINE QLOCAL({{ IBMMQ.QUEUE.5 }}_{{ IBMMQ.QMGR.PORT }})
+      DEFINE CHANNEL({{ IBMMQ.QMGR.CHANNEL }}) CHLTYPE(SVRCONN) TRPTYPE(TCP) MCAUSER('mqm')
       ALTER QMGR CHLAUTH(DISABLED)
-      SET CHLAUTH({{ IBMMQ_QMGR_NAME }}) TYPE(BLOCKUSER) USERLIST('nobody')
+      SET CHLAUTH({{ IBMMQ.QMGR.NAME }}) TYPE(BLOCKUSER) USERLIST('nobody')
   become: yes
   become_user: mqm
 
 - name: run commands to setup queue
   shell:
-    chdir: "{{ IBMMQ_BIN_FOLDER }}"
-    cmd: runmqsc < "IBMMQ_TEMP_FILE_PATH"
+    chdir: '{{ IBMMQ.BIN }}'
+    cmd: runmqsc < 'IBMMQ.TEMP_FILE_PATH'
   become: yes
   become_user: mqm
 
 - name: cleanup
   shell:
-    chdir: "{{ IBMMQ_BIN_FOLDER }}"
-    cmd: rm "IBMMQ_TEMP_FILE_PATH"
+    chdir: '{{ IBMMQ.BIN }}'
+    cmd: rm 'IBMMQ.TEMP_FILE_PATH'
   become: yes
   become_user: mqm
 
 - name: run the queue
   shell:
-    chdir: "{{ IBMMQ_BIN_FOLDER }}"
-    cmd: nohup runmqlsr -m "{{ IBMMQ_QMGR_NAME }}" -t tcp -p "{{ IBMMQ_QMGR_PORT }}" & 
+    chdir: '{{ IBMMQ.BIN }}'
+    cmd: nohup runmqlsr -m '{{ IBMMQ.QMGR.NAME }}' -t tcp -p '{{ IBMMQ.QMGR.PORT }}' & 
   become: yes
   become_user: mqm

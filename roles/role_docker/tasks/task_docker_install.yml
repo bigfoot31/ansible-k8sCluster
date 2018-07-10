@@ -2,8 +2,8 @@
   yum:
     name: docker-ce
     update_cache: no
-    disablerepo: "*"
-    enablerepo: "{{ YUM_LOCAL_REPO_ID }}"
+    disablerepo: '*'
+    enablerepo: '{{ YUM_LOCAL_REPO.CONFIG.ID }}'
   become: yes
   become_user: ansible
 

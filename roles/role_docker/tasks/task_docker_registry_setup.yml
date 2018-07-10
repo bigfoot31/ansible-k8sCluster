@@ -1,11 +1,11 @@
 - name: install ansible-docker module dependencies
   yum:
-    name: "{{ item }}"
+    name: '{{ item }}'
     update_cache: no
-    disablerepo: "*"
-    enablerepo: "{{ YUM_LOCAL_REPO_ID }}"
+    disablerepo: '*'
+    enablerepo: '{{ YUM_LOCAL_REPO.CONFIG.ID }}'
   with_items:
-    - "{{ ANSIBLE_DOCKER_DEPENDENCY_LIST}}"
+    - '{{ DOCKER.IP_RANGE }}'
   become: yes
   become_user: ansible
 
@@ -19,7 +19,7 @@
   docker_image:
     name: registry
     tag: 2	
-    load_path: "{{ DOCKER_HUB_LOCATION }}/{{ DOCKER_IMAGE_REGISTRY_TAR }}"
+    load_path: '{{ DOCKER.HUB_LOCATION }}/{{ DOCKER.IMAGE_REGISTRY_TAR }}'
   become: no
 
 - name: docker run registry image
@@ -29,5 +29,5 @@
     state: started
     restart_policy: always
     ports:
-     - "{{ DOCKER_REGISTRY_PORT_MAPPING }}"
+     - '{{ DOCKER.REGISTRY_PORT_MAPPING }}'
   become: no

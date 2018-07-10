@@ -1,12 +1,11 @@
-HOSTNAME: node5
-
-INTERFACE: 'em1' 
-
-IP_ADDR: 192.168.163.50
-NETMASK: 255.255.255.0
-GATEWAY: 192.168.163.1
-DNS1: 192.168.163.1
-ONBOOT: 'yes'
-
-NETWORK_IP_CONFIG_PATH: '/etc/sysconfig/network-scripts/ifcfg-"{{ INTERFACE }}"'
-NETWORK_IP_CONFIG_TEMPLATE: '../templates/template_staticip.j2'
+NETWORK:
+  IP_ADDR: 192.168.163.50
+  NETMASK: 255.255.255.0
+  GATEWAY: 192.168.163.1
+  DNS1: 192.168.163.1
+  ONBOOT: yes
+  INTERFACE: em1 
+  HOSTNAME: node5
+  CONFIG:
+    PATH: /etc/sysconfig/network-scripts/ifcfg-{{ INTERFACE }}
+    TEMPLATE: ../templates/template_staticip.j2
