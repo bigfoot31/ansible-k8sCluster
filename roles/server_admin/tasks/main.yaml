@@ -1,3 +1,0 @@
-- include_tasks: tasks_localrepo_setup.yaml
-- include_tasks: tasks_docker_registry_setup.yaml
-- include_tasks: tasks_squid_setup.yaml

@@ -1,2 +1,0 @@
-- import_tasks: task_docker_registry_setup.yaml
-- import_tasks: task_docker_setup.yaml

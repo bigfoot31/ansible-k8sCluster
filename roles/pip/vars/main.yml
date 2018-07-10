@@ -1,3 +1,0 @@
-PIP_REPO_CONF_PATH: '~/.pip'
-PIP_REPO_CONF_TEMPLATE: '../templates/template_pip_conf.j2'
-PIP_REPO_PATH: '../files/pip_repo'
