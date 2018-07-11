@@ -7,10 +7,10 @@
 
 - name: convert dhcp to static
   template:
-    dest: '{{ NETWORK.CONFIG.PATH }}'
-    src: '{{ NETWORK.CONFIG.TEMPLATE }}'
+    dest: /etc/sysconfig/network-scripts/ifcfg-em1
+    src: ../templates/template_staticip.j2
   become: yes
-  become_user: ansible
+  become_user: root
 
 - name: turn off networkmanager
   systemd:
@@ -18,7 +18,7 @@
     state: stopped
     enabled: no
   become: yes
-  become_user: ansible
+  become_user: root
 
 - name: restart server
   command: /sbin/shutdown -r +1
@@ -26,4 +26,4 @@
   poll: 0
   ignore_errors: true
   become: yes
-  become_user: ansible
+  become_user: root

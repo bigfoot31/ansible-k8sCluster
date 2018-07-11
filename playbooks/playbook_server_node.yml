@@ -1,6 +1,6 @@
-- hosts: localhost
-  connection: local
-  gather_facts: yes
+- hosts: k8s
+  remote_user: ansible
+  connection: ssh
+  gather_facts: no
   roles:
     - role_docker
-    - role_network

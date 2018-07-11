@@ -3,14 +3,21 @@
     name: docker-ce
     update_cache: no
     disablerepo: '*'
-    enablerepo: '{{ YUM_LOCAL_REPO.CONFIG.ID }}'
+    enablerepo: localrepo
   become: yes
-  become_user: ansible
+  become_user: root
+
+- name: configure insecure_registries
+  template:
+    src: ../templates/template_docker_daemon.j2
+    dest: /etc/docker/daemon.json
+  become: yes
+  become_user: root
 
 - name: start docker service
   systemd:
     name: docker
-    state: started
+    state: restarted
     enabled: yes
   become: yes
-  become_user: ansible
+  become_user: root

@@ -1,4 +1,5 @@
 - name: edit hostname
-  shell: hostnamectl set-hostname '{{ NETWORK.HOSTNAME }}'
+  hostname:
+    name: '{{ NETWORK.HOSTNAME }}'
   become: yes
-  become_user: ansible
+  become_user: root

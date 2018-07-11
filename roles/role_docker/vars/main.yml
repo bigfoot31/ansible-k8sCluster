@@ -5,4 +5,7 @@ DOCKER:
   ANSIBLE_DEPENDENCY:
     - epel-release
     - python-setuptools
-    - python-pip 
+    - python-pip
+  REGISTRY_IP: 131.131.131.201 
+
+YUM_LOCAL_REPO.CONFIG.ID: localrepo

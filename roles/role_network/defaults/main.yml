@@ -1,7 +1,11 @@
 NETWORK:
-  IP_ADDR: 192.168.163.50
-  GATEWAY: 192.168.163.1
-  DNS1: 192.168.163.1
+  IP_ADDR: 131.131.131.101
+  GATEWAY: 131.131.131.1
+  DNS1: 131.131.131.1
   INTERFACE: em1 
-  HOSTNAME: node5
-  TEMP_IP:
+  HOSTNAME: node1
+  TEMP_IP: 192.168.163.50
+  NETMASK: 255.255.255.0
+  ONBOOT: yes
+  CONFIG.TEMPLATE: ../templates/template_staticip.j2
+  CONFIG.PATH: /etc/sysconfig/network-scripts/ifcfg-em1
