@@ -4,14 +4,14 @@
   with_items:
     - '{{ YUM_LOCAL_REPO.YUM_UTILS.RPM_DEPENDENCY }}'
   become: yes
-  become_user: ansible
+  become_user: root
 
 - name: update yum-repolist
   template:
     dest: '{{ YUM_LOCAL_REPO.CONFIG.PATH }}'
     src: '{{ YUM_LOCAL_REPO.CONFIG.TEMPLATE }}'
   become: yes
-  become_user: ansible
+  become_user: root
 
 - name: install ftp server
   yum:
@@ -25,7 +25,7 @@
     state: started
     enabled: yes
   become: yes
-  become_user: ansible
+  become_user: root
 
 - name: copy localrepo files to ftp folder
   copy:
@@ -36,14 +36,14 @@
   group: root
   mode: 0744
   become: yes
-  become_user: ansible
+  become_user: root
 
 - name: create repo
   shell:
     chdir: '{{ YUM_LOCAL_REPO.FTP_FOLDER }}'
     cmd: createrepo .
   become: yes
-  become_user: ansible
+  become_user: root
 
 - name: open port 21 for ftp
   firewalld:
@@ -51,4 +51,4 @@
     permanent: true
     state: enabled
   become: yes
-  become_user: ansible
+  become_user: root
