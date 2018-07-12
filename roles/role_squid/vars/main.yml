@@ -1,11 +1,8 @@
 SQUID:
-  USER: hotscan
-  PASSWORD: banana12
   PASSWD:
     PATH: /etc/squid/passwd
     HASH_SCHEME: apr_md5_crypt
   CONF_PATH: /etc/squid/squid.conf
-  IP_RANGE: 192.168.163.0
   PORT: 3127
   YUM_DEPENDENCY:
     - squid

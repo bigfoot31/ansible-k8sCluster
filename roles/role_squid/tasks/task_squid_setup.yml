@@ -7,7 +7,7 @@
   with_items:
     - '{{ SQUID.YUM_DEPENDENCY }}'
   become: yes
-  become_user: ansible
+  become_user: root
 
 - name: create passwdfile for squid proxy
   htpasswd:
@@ -19,7 +19,7 @@
     group: root
     mode: 0604
   become: yes
-  become_user: ansible
+  become_user: root
 
 - name: open squid port in firewalld
   firewalld:
@@ -28,14 +28,14 @@
     permanent: true
     state: enabled
   become: yes
-  become_user: ansible
+  become_user: root
 
 - name: restart firewall service
   systemd:
     name: firewalld
     state: restarted
   become: yes
-  become_user: ansible
+  become_user: root
 
 - name: edit squid conf file - add ip range
   replace:
@@ -43,7 +43,7 @@
     regexp: '192\.168\.0\.0/16'
     replace: '{{ SQUID.IP_RANGE }}'
   become: yes
-  become_user: ansible
+  become_user: root
 
 - name: edit squid conf file - add squid port
   replace:
@@ -51,7 +51,7 @@
     regexp: '^http_port\s+3128'
     replace: 'http_port {{ SQUID.PORT }}'
   become: yes
-  become_user: ansible
+  become_user: root
 
 - name: edit squid conf file - add authentication
   blockinfile:
@@ -65,7 +65,7 @@
       acl authenticated proxy_auth REQUIRED
       http_access allow authenticated
   become: yes
-  become_user: ansible
+  become_user: root
 
 - name: start squid service
   service:
@@ -73,4 +73,4 @@
     state: started
     enabled: yes
   become: yes
-  become_user: ansible
+  become_user: root
