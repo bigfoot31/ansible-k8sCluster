@@ -3,16 +3,6 @@ IBMMQ:
   SRC: ../files/WS_MQ_LINUX_ON_X86_64_7.5.0.2_IMG.tar
   BIN: /opt/mqm/bin
   TEMP_FILE_PATH: ~/.channel.in
-  QMGR:
-    NAME: DOCKER
-    CHANNEL: DOCKER_CHANNEL
-    PORT: 30001
-  QUEUE:
-    1: HOTSCANINQ
-    2: HOTSCANOUTQ1
-    3: HOTSCANOUTQ2
-    4: HOTSCANRPLYQ
-    5: MQ_BACKOUTQ1
   RPM_DEPENDENCY:
     - pax
     - rpm-build
