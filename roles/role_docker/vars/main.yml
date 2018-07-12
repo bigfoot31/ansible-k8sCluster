@@ -1,11 +1,15 @@
 DOCKER:
-  HUB_LOCATION: ../files/
-  IMAGE_REGISTRY_TAR: registry.tar
-  REGISTRY_PORT_MAPPING: 5000:5000
-  ANSIBLE_DEPENDENCY:
+  REGISTRY:
+    IMAGE_TAR: registry.tar
+    PORT_MAPPING: 5000:5000
+    LOCATION: ../files/
+
+ANSIBLE:
+  DOCKER_DEPENDENCY:
     - epel-release
     - python-setuptools
     - python-pip
-  REGISTRY_IP: 131.131.131.201 
 
-YUM_LOCAL_REPO.CONFIG.ID: localrepo
+YUM_LOCAL_REPO:
+  CONFIG:
+    ID: localrepo

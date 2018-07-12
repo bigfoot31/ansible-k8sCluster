@@ -1,0 +1,6 @@
+- name: configure insecure_registries
+  template:
+    src: ../templates/template_docker_daemon.j2
+    dest: /etc/docker/daemon.json
+  become: yes
+  become_user: root

@@ -1,2 +1,3 @@
 - import_tasks: task_docker_install.yml
-#- import_tasks: task_docker_registry_setup.yml
+- import_tasks: task_configure_insecure_registries.yml
+- import_tasks: task_docker_registry_setup.yml
