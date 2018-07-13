@@ -1,0 +1,46 @@
+- name: remove taint
+  shell: kubectl taint nodes $(hostname) key:NoSchedule- &> /dev/null
+  become: yes
+  become_user: root
+  register: answer
+  failed_when: answer.rc not in [0, 1]
+
+- name: remove taint2
+  shell: kubectl taint nodes $(hostname) node-role.kubernetes.io/master:NoSchedule- &> /dev/null
+  become: yes
+  become_user: root
+  failed_when: answer.rc not in [0, 1]
+
+- names: copy files to server
+  copy:
+    src: ../files
+    dest: ~/temp
+    remote_src: false
+  become: yes
+  become_user: root
+
+- name: start dashboard
+  shell: kubectl create -f ~/temp/{{ item }}
+  with_items:
+    - influxdb.yaml
+    - heapster.yaml
+    - grafana.yaml
+    - heapster-rbac.yaml
+    - dashboard-creation.yml
+    - dashboard-admin.yaml
+  become: yes
+  become_user: root
+
+- name: add taint
+  shell: kubectl taint nodes $(hostname) key=value:NoSchedule &> /dev/null
+  become: yes
+  become_user: root
+  failed_when: answer.rc not in [0, 1]
+
+- name: cleanup master
+  file:
+    path: ~/
+    state: absent
+  become: yes
+  become_user: root
+
