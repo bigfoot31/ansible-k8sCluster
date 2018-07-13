@@ -1,5 +1,9 @@
-**/files/
+**/files/*
+!**/files/.gitkeep
 WS_MQ_LINUX_ON_X86_64_7.5.0.2_IMG.tar
 *.tar
 **/test
 test.*
+
+
+!**/files/flannel.yml
