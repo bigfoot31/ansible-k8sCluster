@@ -3,7 +3,7 @@ IBMMQ:
   SRC: ../files/WS_MQ_LINUX_ON_X86_64_7.5.0.2_IMG.tar
   BIN: /opt/mqm/bin
   TEMP_FILE_PATH: ~/.channel.in
-  RPM_DEPENDENCY:
+  YUM_DEPENDENCY:
     - pax
     - rpm-build
   RPM:

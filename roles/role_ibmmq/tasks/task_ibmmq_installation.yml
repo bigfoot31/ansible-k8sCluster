@@ -3,7 +3,7 @@
     name: '{{ item }}'
     state: present
   with_items:
-    - '{{ IBMMQ.RPM_DEPENDENCY }}'
+    - '{{ IBMMQ.YUM_DEPENDENCY }}'
   become: yes
   become_user: root
 

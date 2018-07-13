@@ -5,13 +5,6 @@
   become: yes
   become_user: mqm
 
-- name: start queue manager
-  shell:
-    chdir: '{{ IBMMQ.BIN }}'
-    cmd: strmqm '{{ IBMMQ.QMGR.NAME }}'
-  become: yes
-  become_user: mqm
-
 - name: create command text file
   blockinfile:
     path: 'IBMMQ.TEMP_FILE_PATH'
@@ -33,12 +26,5 @@
   shell:
     chdir: '{{ IBMMQ.BIN }}'
     cmd: runmqsc < 'IBMMQ.TEMP_FILE_PATH'
-  become: yes
-  become_user: mqm
-
-- name: run the queue
-  shell:
-    chdir: '{{ IBMMQ.BIN }}'
-    cmd: nohup runmqlsr -m '{{ IBMMQ.QMGR.NAME }}' -t tcp -p '{{ IBMMQ.QMGR.PORT }}' & 
   become: yes
   become_user: mqm
