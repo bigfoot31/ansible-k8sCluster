@@ -1,0 +1,67 @@
+- name: reset previous cluster
+  shell: kubeadm reset
+  become: yes
+  become_user: root
+
+- name: check docker images
+  docker_image:
+    name: '{{ item ]]'
+    state: present
+  with_items:
+  - 192.168.163.201:5000/k8s.gcr.io/kube-controller-manager-amd64:v1.10.5
+  - 192.168.163.201:5000/k8s.gcr.io/kube-proxy-amd64:v1.10.5
+  - 192.168.163.201:5000/k8s.gcr.io/kube-scheduler-amd64:v1.10.5
+  - 192.168.163.201:5000/k8s.gcr.io/kube-apiserver-amd64:v1.10.5
+  - 192.168.163.201:5000/k8s.gcr.io/heapster-amd64:v1.5.3
+  - 192.168.163.201:5000/k8s.gcr.io/etcd-amd64:3.1.12
+  - 192.168.163.201:5000/k8s.gcr.io/kubernetes-dashboard-amd64:v1.8.3
+  - 192.168.163.201:5000/quay.io/coreos/flannel:v0.10.0-amd64
+  - 192.168.163.201:5000/k8s.gcr.io/k8s-dns-dnsmasq-nanny-amd64:1.14.8
+  - 192.168.163.201:5000/k8s.gcr.io/k8s-dns-sidecar-amd64:1.14.8
+  - 192.168.163.201:5000/k8s.gcr.io/k8s-dns-kube-dns-amd64:1.14.8
+  - 192.168.163.201:5000/k8s.gcr.io/pause-amd64:3.1
+  - 192.168.163.201:5000/k8s.gcr.io/heapster-influxdb-amd64:v1.3.3
+  - 192.168.163.201:5000/k8s.gcr.io/heapster-grafana-amd64:v4.4.3
+
+
+- name: start new cluster
+  shell: kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=192.168.163.100 --kubernetes-version=v1.10.5
+  async: 10
+  poll: 60
+  become: yes
+  become_user: root
+
+- name: copy admin conf file
+  copy:
+    src: /etc/kubernetes/admin.conf
+    dest: /root/.kube/config
+    owner: root
+    group: root
+    mode: 0755
+    remote_src: yes
+  become: yes
+  become_user: root
+
+- name: remove flannel file
+  file:
+    path: /root/flannel.yml
+    state: absent
+
+- name: copy flannel file
+  copy:
+    src: '{{ k8s.flannel.config.file_path }}'
+    dest: /root/
+    remote_src: no
+  become: yes
+  become_user: root
+
+- name: start flannel network
+  shell: kubectl apply -f /root/flannel.yml
+  become: yes
+  become_user: root
+
+- name: change pod-eviction time
+  replace:
+    insertafter: '\s+- kube-controller-manager'
+    line: '    - --pod-eviction-timeout=2s'
+    path: /root/.kube/config

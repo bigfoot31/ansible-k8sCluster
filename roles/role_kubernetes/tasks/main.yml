@@ -1,8 +1,8 @@
-- import_tasks: task_common.yml
+- import_tasks: task_k8s-node_setup.yml
   when: k8s.node
 - import_tasks: task_k8s-master_setup.yml
   when: k8s.master
-- import_tasks: tasks_k8s-dashboard.yml
+- import_tasks: task_k8s-start_dashboard.yml
   when: k8s.dashboard
-- import_tasks: tasks_start-cluster.yml
-  when: k8s.cluster.start
+- import_tasks: task_k8s-start_cluster.yml
+  when: k8s.cluster_start

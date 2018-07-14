@@ -1,0 +1,4 @@
+k8s:
+  flannel:
+    config:
+      file_path: '{{ role_path }}/files/flannel.yml'

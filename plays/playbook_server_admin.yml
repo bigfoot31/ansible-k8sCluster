@@ -6,5 +6,6 @@
       all: true
       config: true
       setup: true
-  roles:
-    - role_yum
+  tasks:
+  - name: hello
+    shell: echo 'hello'
