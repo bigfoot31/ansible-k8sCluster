@@ -1,2 +1,5 @@
 - import_tasks: task_change_hostname.yml
+  when: {{ tasks.network.hostname }} || {{ tasks.network.all }}
+
 - import_tasks: task_convert_staticip.yml
+  when: {{ tasks.network.staticip }} || {{ tasks.network.all }}

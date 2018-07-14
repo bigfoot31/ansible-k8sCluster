@@ -1,3 +1,8 @@
 - import_tasks: task_docker_install.yml
-- import_tasks: task_configure_insecure_registries.yml
+  when: {{ tasks.docker.install }} || {{ tasks.docker.all }}
+
+- import_tasks: tasks/task_docker_configure_insecure_registries.yml
+  when: {{ tasks.docker.insecure }} || {{ tasks.docker.all }}
+
 - import_tasks: task_docker_registry_setup.yml
+  when: {{ tasks.docker.registry }} || {{ tasks.docker.all }}

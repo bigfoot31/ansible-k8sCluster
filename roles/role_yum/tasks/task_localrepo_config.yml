@@ -1,0 +1,6 @@
+- name: update yum-repolist
+  template:
+    dest: '{{ YUM_LOCAL_REPO.CONFIG.PATH }}'
+    src: '{{ YUM_LOCAL_REPO.CONFIG.TEMPLATE }}'
+  become: yes
+  become_user: root
