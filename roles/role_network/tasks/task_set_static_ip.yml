@@ -13,6 +13,14 @@
   become: yes
   become_user: root
 
+- name: restart network
+  systemd:
+    name: network
+    state: restarted
+    enabled: yes
+  become: yes
+  become_user: root
+
 - name: restart server
   command: /sbin/shutdown -r +1
   async: 0

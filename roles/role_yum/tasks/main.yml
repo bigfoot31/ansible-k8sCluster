@@ -1,4 +1,5 @@
-- import_tasks: tasks_localrepo_setup.yml
-  when: {{ tasks.yum.setup }}
+- import_tasks: task_localrepo_setup.yml
+  when: 'yum.setup or yum.all'
 
 - import_tasks: task_localrepo_config.yml
+  when: 'yum.config or yum.all'

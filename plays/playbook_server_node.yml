@@ -1,6 +1,16 @@
-- hosts: k8s
+- hosts: node4
   remote_user: ansible
   connection: ssh
   gather_facts: no
+  vars:
+    network:
+      all: true
+      hostname: true
+      staticip: true
+    yum:
+      all: false
+      config: true
+      setup: false
   roles:
-    - role_docker
+    - role_yum
+#    - role_network
