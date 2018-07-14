@@ -26,12 +26,14 @@
 
 - name: copy localrepo files to ftp folder
   copy:
-    src: '{{ YUM_LOCAL_REPO.SRC }}'
+    src: '{{ item }}'
     dest: '{{ YUM_LOCAL_REPO.FTP_FOLDER }}'
     directory_mode: yes
     owner: root
     group: root
     mode: 0744
+  with_fileglob:
+    - '{{ YUM_LOCAL_REPO.SRC }}'
   become: yes
   become_user: root
 
@@ -47,5 +49,14 @@
     port: 21/tcp
     permanent: true
     state: enabled
+    service: ftp
+  become: yes
+  become_user: root
+
+- name: restart firewall
+  systemd:
+    name: firewalld
+    state: restarted
+    enabled: yes
   become: yes
   become_user: root

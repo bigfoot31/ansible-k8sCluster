@@ -3,14 +3,20 @@
   connection: ssh
   gather_facts: no
   vars:
+    docker:
+      install: true
+      insecure: true
+      registry: false
+      all: false
     network:
-      all: true
       hostname: true
       staticip: true
+      all: true
     yum:
-      all: false
       config: true
       setup: false
+      all: false
   roles:
     - role_yum
-#    - role_network
+    - role_network
+    - role_docker

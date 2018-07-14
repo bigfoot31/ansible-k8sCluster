@@ -6,8 +6,10 @@
     enablerepo: localrepo
   become: yes
   become_user: root
+  notify:
+  - restart docker
 
-- name: start docker service
+- name: restart docker
   systemd:
     name: docker
     state: restarted

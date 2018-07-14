@@ -4,3 +4,5 @@
     dest: /etc/docker/daemon.json
   become: yes
   become_user: root
+  notify:
+  - restart docker
