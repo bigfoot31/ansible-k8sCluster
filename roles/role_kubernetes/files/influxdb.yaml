@@ -20,7 +20,7 @@ spec:
       volumes:
       - name: influxdb-storage
         emptyDir: {}
-     tolerations:
+      tolerations:
       - key: node-role.kubernetes.io/master
         effect: NoSchedule
 ---

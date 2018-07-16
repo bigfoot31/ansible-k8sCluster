@@ -16,8 +16,7 @@
       all: true
     k8s:
       node: true
-      master: false
-      dashboard: false
+      dashboard: true
       cluster_start: true
     yum:
       config: true

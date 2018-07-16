@@ -1,7 +1,7 @@
 - names: copy files to server
   copy:
     src: '{{ role_path }}/files/{{ item }}'
-    dest: ~/temp
+    dest: ~/temp/
     remote_src: false
   become: yes
   become_user: root
@@ -12,7 +12,6 @@
     - heapster-rbac.yaml
     - dashboard-creation.yml
     - dashboard-admin.yaml
-
 
 - name: start dashboard
   shell: kubectl create -f ~/temp/{{ item }}
@@ -33,3 +32,7 @@
   become: yes
   become_user: root
 
+- name: start kubeproxy
+  shell: nohup kubectl proxy --address 131.131.131.100 --port=8001 --accept-hosts='^*$' &
+  become: yes
+  become_user: root
