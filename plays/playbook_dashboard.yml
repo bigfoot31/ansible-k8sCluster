@@ -1,0 +1,14 @@
+- hosts: master
+  remote_user: ansible
+  become: yes
+  gather_facts: no
+  connection: ssh
+  vars:
+    k8s:
+      node: false
+      master: false
+      dashboard: true
+      cluster:
+        start: false
+  roles:
+    - role_kubernetes

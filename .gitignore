@@ -6,4 +6,4 @@ WS_MQ_LINUX_ON_X86_64_7.5.0.2_IMG.tar
 test.*
 inventory/host_vars/node4.yml
 
-!**/files/flannel.yml
+!roles/role_kubernetes/files/*
