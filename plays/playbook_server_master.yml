@@ -1,7 +1,9 @@
 - hosts: master
   remote_user: ansible
   connection: ssh
-  gather_facts: no
+  gather_facts: yes
+  environment:
+    PYTHONPATH: "{{ lookup('env','PYTHONPATH') }}:/usr/lib/python2.7/site-packages/"
   vars:
     docker:
       install: true

@@ -5,21 +5,15 @@
 
 - name: install kubeadm
   yum:
-    name: kubeadm
+    name: '{{ item }}'
     state: present
     disablerepo: '*'
     enablerepo: localrepo
   become: yes
   become_user: root
-
-- name: install cri-tools
-  yum:
-    name: cri-tools
-    state: present
-    disablerepo: '*'
-    enablerepo: localrepo
-  become: yes
-  become_user: root
+  with_items:
+  - kubeadm
+  - cri-tools
 
 - name: disable seLinux
   selinux:
@@ -46,6 +40,24 @@
     path: /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
   become: yes
   become_user: root
+
+- name: modify ssh timeout
+  template:
+    src: '{{ SSHD.TEMPLATE_FILE }}' 
+    dest: '{{ SSHD.CONFIG.FILE_PATH }}'
+    backup: yes
+  become: yes
+  become_user: root
+  register: sshdconfig
+
+- name: restart sshd
+  systemd:
+    name: sshd
+    state: restarted
+    enabled: yes
+  become: yes
+  become_user: root
+  when: sshdconfig.changed
 
 - name: sysctl update
   command: sysctl --system

@@ -1,4 +1,32 @@
-k8s:
-  flannel:
-    config:
-      file_path: '{{ role_path }}/files/flannel.yml'
+K8s:
+  CONFIG:
+    FILE_PATH: '{{ role_path }}/templates/template_k8s_init.j2'
+  FLANNEL:
+    CONFIG:
+      FILE_PATH: '{{ role_path }}/files/flannel.yml'
+  MASTER:
+    IMAGES:
+    - k8s.gcr.io/kube-controller-manager-amd64:v1.10.5
+    - k8s.gcr.io/kube-proxy-amd64:v1.10.5
+    - k8s.gcr.io/kube-scheduler-amd64:v1.10.5
+    - k8s.gcr.io/kube-apiserver-amd64:v1.10.5
+    - k8s.gcr.io/heapster-amd64:v1.5.3
+    - k8s.gcr.io/etcd-amd64:3.1.12
+    - k8s.gcr.io/kubernetes-dashboard-amd64:v1.8.3
+    - quay.io/coreos/flannel:v0.10.0-amd64
+    - k8s.gcr.io/k8s-dns-dnsmasq-nanny-amd64:1.14.8
+    - k8s.gcr.io/k8s-dns-sidecar-amd64:1.14.8
+    - k8s.gcr.io/k8s-dns-kube-dns-amd64:1.14.8
+    - k8s.gcr.io/pause-amd64:3.1
+    - k8s.gcr.io/heapster-influxdb-amd64:v1.3.3
+    - k8s.gcr.io/heapster-grafana-amd64:v4.4.3
+  PODS:
+    CIDR: 10.244.0.0/16
+  VERSION: v1.10.5
+
+SSHD:
+  TEMPLATE_FILE: '{{ role_path }}/templates/template_sshd_config.j2'
+  CONFIG:
+    FILE_PATH: /etc/ssh/sshd_config
+    CLIENTALIVECOUNTMAX: 3
+    CLIENTALIVEINTERVAL: 120

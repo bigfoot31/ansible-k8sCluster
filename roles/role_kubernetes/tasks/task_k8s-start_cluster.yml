@@ -3,31 +3,22 @@
   become: yes
   become_user: root
 
-- name: check docker images
-  docker_image:
-    name: '{{ item ]]'
-    state: present
-  with_items:
-  - 192.168.163.201:5000/k8s.gcr.io/kube-controller-manager-amd64:v1.10.5
-  - 192.168.163.201:5000/k8s.gcr.io/kube-proxy-amd64:v1.10.5
-  - 192.168.163.201:5000/k8s.gcr.io/kube-scheduler-amd64:v1.10.5
-  - 192.168.163.201:5000/k8s.gcr.io/kube-apiserver-amd64:v1.10.5
-  - 192.168.163.201:5000/k8s.gcr.io/heapster-amd64:v1.5.3
-  - 192.168.163.201:5000/k8s.gcr.io/etcd-amd64:3.1.12
-  - 192.168.163.201:5000/k8s.gcr.io/kubernetes-dashboard-amd64:v1.8.3
-  - 192.168.163.201:5000/quay.io/coreos/flannel:v0.10.0-amd64
-  - 192.168.163.201:5000/k8s.gcr.io/k8s-dns-dnsmasq-nanny-amd64:1.14.8
-  - 192.168.163.201:5000/k8s.gcr.io/k8s-dns-sidecar-amd64:1.14.8
-  - 192.168.163.201:5000/k8s.gcr.io/k8s-dns-kube-dns-amd64:1.14.8
-  - 192.168.163.201:5000/k8s.gcr.io/pause-amd64:3.1
-  - 192.168.163.201:5000/k8s.gcr.io/heapster-influxdb-amd64:v1.3.3
-  - 192.168.163.201:5000/k8s.gcr.io/heapster-grafana-amd64:v4.4.3
-
+#- name: check docker images
+#  docker_image:
+#    name: '{{ item }}'
+#    state: present
+#  with_items:
+#  - '{{ DOCKER.REGISTRY.IP }}/{{ K8s.MASTER.IMAGES }}'
+#
+- name: kubeadm config file
+  template:
+    src: '{{ K8s.CONFIG.FILE_PATH }}'
+    dest: /root/hotscan_k8s.yml
+  become: yes
+  become_user: root
 
 - name: start new cluster
-  shell: kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=192.168.163.100 --kubernetes-version=v1.10.5
-  async: 10
-  poll: 60
+  shell: kubeadm init --config /root/hotscan_k8s.yml
   become: yes
   become_user: root
 
@@ -49,9 +40,17 @@
 
 - name: copy flannel file
   copy:
-    src: '{{ k8s.flannel.config.file_path }}'
+    src: '{{ K8s.FLANNEL.CONFIG.FILE_PATH }}'
     dest: /root/
     remote_src: no
+  become: yes
+  become_user: root
+
+- name: change pod-eviction time
+  lineinfile:
+    insertafter: '\s+- kube-controller-manager'
+    line: '    - --pod-eviction-timeout=2s'
+    path: /etc/kubernetes/manifests/kube-controller-manager.yaml
   become: yes
   become_user: root
 
@@ -59,9 +58,3 @@
   shell: kubectl apply -f /root/flannel.yml
   become: yes
   become_user: root
-
-- name: change pod-eviction time
-  replace:
-    insertafter: '\s+- kube-controller-manager'
-    line: '    - --pod-eviction-timeout=2s'
-    path: /root/.kube/config
