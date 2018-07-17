@@ -13,7 +13,7 @@
       staticip: true
       all: true
     k8s:
-      addnode: false
+      addnode: true
       node: true
       dashboard: false
       cluster_start: false

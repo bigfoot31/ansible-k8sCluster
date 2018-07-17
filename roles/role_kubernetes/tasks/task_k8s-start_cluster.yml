@@ -1,3 +1,5 @@
+- meta: flush_handlers
+
 - name: reset previous cluster
   shell: kubeadm reset
   become: yes

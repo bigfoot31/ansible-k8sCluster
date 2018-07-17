@@ -1,0 +1,25 @@
+- meta: flush_handlers
+
+- name: reset previous kubelet
+  shell: kubeadm reset
+  become: yes
+  become_user: root
+
+- name: get current bootstrap token
+  shell: kubeadm token list | grep 'kubeadm init' | awk '{ print $1 }'
+  register: TOKEN
+  delegate_to: master
+  become: yes
+  become_user: root
+
+- name: get cert
+  shell: openssl x509 -in /etc/kubernetes/pki/ca.crt -noout -pubkey | openssl rsa -pubin -outform DER 2>/dev/null | sha256sum | awk '{ print $1 }'
+  register: HASH
+  delegate_to: master
+  become: yes
+  become_user: root
+ 
+- name: add node to master
+  shell: kubeadm join 131.131.131.100:6443 --token {{ TOKEN.stdout }}  --discovery-token-ca-cert-hash sha256:{{ HASH.stdout }} --ignore-preflight-errors=cri
+  become: yes
+  become_user: root

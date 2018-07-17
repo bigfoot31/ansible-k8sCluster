@@ -1,9 +1,7 @@
-- hosts: master
+- hosts: node2
   remote_user: ansible
   connection: ssh
   gather_facts: yes
-  environment:
-    PYTHONPATH: "{{ lookup('env','PYTHONPATH') }}:/usr/lib/python2.7/site-packages/"
   vars:
     docker:
       install: true
@@ -15,6 +13,7 @@
       staticip: true
       all: true
     k8s:
+      addnode: false
       node: true
       dashboard: true
       cluster_start: true

@@ -1,1 +1,8 @@
-filename: node2.yml
+NETWORK:
+  IP_ADDR: 131.131.131.102
+  GATEWAY: 131.131.131.1
+  DNS1: 131.131.131.1
+  NETMASK: 255.255.255.0
+  HOSTNAME: node2
+  INTERFACE: em1
+  CONFIG.PATH: /etc/sysconfig/network-scripts/ifcfg-em1

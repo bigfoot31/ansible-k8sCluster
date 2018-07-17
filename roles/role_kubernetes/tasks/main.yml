@@ -4,3 +4,5 @@
   when: k8s.cluster_start
 - import_tasks: task_k8s-start_dashboard.yml
   when: k8s.dashboard
+- import_tasks: task_k8s-add_nodes.yml
+  when: k8s.addnode
