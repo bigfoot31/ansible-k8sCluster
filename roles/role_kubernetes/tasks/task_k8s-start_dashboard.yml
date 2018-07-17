@@ -1,4 +1,4 @@
-- names: copy files to server
+- name: copy files to server
   copy:
     src: '{{ role_path }}/files/{{ item }}'
     dest: ~/temp/
@@ -32,7 +32,14 @@
   become: yes
   become_user: root
 
+- name: stop previous kubeproxy
+  shell: kill -9 $(ps aux | grep "kubectl proxy" | awk '{ print $2 }')
+  become: yes
+  become_user: root
+  register: kubeproxy
+  failed_when: kubeproxy.rc in []
+
 - name: start kubeproxy
-  shell: nohup kubectl proxy --address 131.131.131.100 --port=8001 --accept-hosts='^*$' &
+  shell: nohup kubectl proxy --address 131.131.131.100 --port=8001 --accept-hosts='^*$' </dev/null >/dev/null 2>&1 &
   become: yes
   become_user: root
