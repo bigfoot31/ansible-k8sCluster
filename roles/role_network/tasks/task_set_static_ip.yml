@@ -2,21 +2,6 @@
   template:
     dest: /etc/sysconfig/network-scripts/ifcfg-em1
     src: ../templates/template_staticip.j2
-  become: yes
-  become_user: root
-
-- name: turn off networkmanager
-  systemd:
-    name: NetworkManager
-    state: stopped
-    enabled: no
-  become: yes
-  become_user: root
-
-- name: restart network
-  systemd:
-    name: network
-    state: restarted
-    enabled: yes
+  notify: restart network
   become: yes
   become_user: root

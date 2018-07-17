@@ -9,6 +9,7 @@
     state: present
     disablerepo: '*'
     enablerepo: localrepo
+  notify: restart kubelet
   become: yes
   become_user: root
   with_items:
@@ -48,16 +49,7 @@
     backup: yes
   become: yes
   become_user: root
-  register: sshdconfig
-
-- name: restart sshd
-  systemd:
-    name: sshd
-    state: restarted
-    enabled: yes
-  become: yes
-  become_user: root
-  when: sshdconfig.changed
+  notify: restart sshd
 
 - name: sysctl update
   command: sysctl --system
@@ -74,13 +66,5 @@
 
 - name: disable swap
   shell: swapoff -a
-  become: yes
-  become_user: root
-
-- name: restart kubelet
-  systemd:
-    name: kubelet
-    state: restarted
-    enabled: yes
   become: yes
   become_user: root

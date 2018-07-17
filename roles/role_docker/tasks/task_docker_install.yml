@@ -8,11 +8,3 @@
   become_user: root
   notify:
   - restart docker
-
-- name: restart docker
-  systemd:
-    name: docker
-    state: restarted
-    enabled: yes
-  become: yes
-  become_user: root

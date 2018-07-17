@@ -12,17 +12,11 @@
   yum:
     name: '{{ YUM_LOCAL_REPO.SRC }}/{{ item }}'
     state: present
-  with_items:
-    - '{{ YUM_LOCAL_REPO.VSFTPD.RPM_DEPENDENCY }}'
-  become: yes
-
-- name: start ftp server
-  systemd:
-    name: vsftpd
-    state: started
-    enabled: yes
+  notify: restart ftp
   become: yes
   become_user: root
+  with_items:
+    - '{{ YUM_LOCAL_REPO.VSFTPD.RPM_DEPENDENCY }}'
 
 - name: copy localrepo files to ftp folder
   copy:
@@ -50,13 +44,6 @@
     permanent: true
     state: enabled
     service: ftp
-  become: yes
-  become_user: root
-
-- name: restart firewall
-  systemd:
-    name: firewalld
-    state: restarted
-    enabled: yes
+  notify: restart firewall
   become: yes
   become_user: root
