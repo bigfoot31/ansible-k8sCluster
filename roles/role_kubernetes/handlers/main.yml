@@ -1,0 +1,17 @@
+- name: restart kubelet service
+  service:
+    name: kubelet
+    state: restarted
+    enabled: yes
+  listen: restart kubelet
+  become: yes
+  become_user: root
+
+- name: restart sshd service
+  service:
+    name: sshd
+    state: restarted
+    enabled: yes
+  listen: restart sshd
+  become: yes
+  become_user: root
