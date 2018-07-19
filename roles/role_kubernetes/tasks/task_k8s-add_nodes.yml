@@ -1,9 +1,6 @@
 - meta: flush_handlers
 
-- name: reset previous kubelet
-  shell: kubeadm reset
-  become: yes
-  become_user: root
+- import_tasks: task_k8s-reset_cluster.yml
 
 - name: get current bootstrap token
   shell: kubeadm token list | grep 'kubeadm init' | awk '{ print $1 }'

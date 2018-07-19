@@ -1,25 +1,25 @@
 - hosts: master
   remote_user: ansible
   connection: ssh
-  gather_facts: yes
+  gather_facts: no
   vars:
     docker:
-      install: true
-      insecure: true
+      install: false
+      insecure: false
       registry: false
       all: false
     network:
-      hostname: true
-      staticip: true
-      all: true
+      hostname: false
+      staticip: false
+      all: false
     k8s:
       addnode: false
-      node: true
-      dashboard: true
-      cluster_start: true
-      reset: false
+      node: false
+      dashboard: false
+      cluster_start: false
+      reset: true
     yum:
-      config: true
+      config: false
       setup: false
       all: false
   roles:

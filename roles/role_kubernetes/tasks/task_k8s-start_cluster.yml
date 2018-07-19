@@ -1,17 +1,12 @@
 - meta: flush_handlers
 
-- name: reset previous cluster
-  shell: kubeadm reset
+- import_tasks: task_k8s-reset_cluster.yml
+
+- name: check docker images
+  shell: kubeadm config images pull --config hotscan_k8s.yml
   become: yes
   become_user: root
 
-#- name: check docker images
-#  docker_image:
-#    name: '{{ item }}'
-#    state: present
-#  with_items:
-#  - '{{ DOCKER.REGISTRY.IP }}/{{ K8s.MASTER.IMAGES }}'
-#
 - name: kubeadm config file
   template:
     src: '{{ K8s.CONFIG.FILE_PATH }}'
@@ -20,7 +15,7 @@
   become_user: root
 
 - name: start new cluster
-  shell: kubeadm init --config /root/hotscan_k8s.yml
+  shell: yes | kubeadm init --config hotscan_k8s.yml
   become: yes
   become_user: root
 

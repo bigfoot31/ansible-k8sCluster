@@ -1,0 +1,91 @@
+- meta: flush_handlers
+
+- name: reset cluster
+  shell: yes | kubeadm reset
+  become: yes
+  become_user: root
+
+- name: stop kubelet
+  systemd:
+    name: kubelet
+    state: stopped
+  become: yes
+  become_user: root
+
+- name: stop docker
+  systemd:
+    name: docker
+    state: stopped
+  become: yes
+  become_user: root
+
+- name: Ansible delete file glob
+  find:
+    path: '{{ item }}'
+    patterns: '*'
+    recurse: true
+    file_type: any
+    hidden: yes
+  register: files_to_delete
+  with_items:
+  - /var/lib/cni/
+  - /var/lib/kubelet/
+  - /etc/cni/
+  become: yes
+  become_user: root
+
+
+- name: Display all variables/facts known for a host
+  debug:
+    var: files_to_delete
+    verbosity: 4
+
+- name: delete network files
+  file:
+    path: '{{ item.path }}'
+    state: absent
+  with_items: 
+  - '{{ files_to_delete.results[0].files }}'
+  - '{{ files_to_delete.results[1].files }}'
+  - '{{ files_to_delete.results[2].files }}'
+  become: yes
+  become_user: root
+
+- name: interface cni0 down
+  net_interface:
+    name: cni0
+    state: absent
+    enabled: False
+  become: yes
+  become_user: root
+
+- name: interface flannel.1 down
+  net_interface:
+    name: flannel.1
+    state: absent
+    enabled: False
+  become: yes
+  become_user: root
+
+- name: interface docker0 down
+  net_interface:
+    name: docker0
+    enabled: False
+  become: yes
+  become_user: root
+
+- name: start kubelet
+  systemd:
+    name: kubelet
+    state: started
+  become: yes
+  become_user: root
+
+- name: start docker
+  systemd:
+    name: docker
+    state: started
+  become: yes
+  become_user: root
+
+

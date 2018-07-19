@@ -6,3 +6,5 @@
   when: k8s.dashboard
 - import_tasks: task_k8s-add_nodes.yml
   when: k8s.addnode
+- import_tasks: task_k8s-reset_cluster.yml
+  when: k8s.reset
