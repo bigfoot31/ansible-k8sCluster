@@ -1,5 +1,5 @@
 - import_tasks: task_set_hostname.yml
-  when: 'network.hostname or network.all'
 
 - import_tasks: task_set_static_ip.yml
-  when: 'network.staticip or network.all'
+
+- import_tasks: task_set_hosts.yml

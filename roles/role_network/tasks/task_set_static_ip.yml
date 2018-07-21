@@ -1,7 +1,30 @@
 - name: convert dhcp to static
   template:
-    dest: /etc/sysconfig/network-scripts/ifcfg-em1
+    dest: '{{ NETWORK.CONFIG.PATH }}'
     src: ../templates/template_staticip.j2
-  notify: restart network
+  register: ipstatic
+  become: yes
+  become_user: root
+
+- name: turn off networkmanager
+  systemd:
+    name: NetworkManager
+    state: stopped
+    enabled: no
+  become: yes
+  become_user: root
+
+- name: restart network service
+  systemd:
+    name: network
+    state: restarted
+  when: ipstatic.changed
+  become: yes
+  become_user: root
+
+- name: restart network service
+  systemd:
+    name: network
+    enabled: yes
   become: yes
   become_user: root
