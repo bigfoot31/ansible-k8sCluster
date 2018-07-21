@@ -2,7 +2,21 @@
   template:
     src: ../templates/template_docker_daemon.j2
     dest: /etc/docker/daemon.json
+  register: docker_register
   become: yes
   become_user: root
-  notify:
-  - restart docker
+
+- name: restart docker
+  service:
+    name: docker
+    state: restarted
+  when: docker_register.changed
+  become: yes
+  become_user: root
+
+- name: enable docker
+  service:
+    name: docker
+    enabled: yes
+  become: yes
+  become_user: root

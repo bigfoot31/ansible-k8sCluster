@@ -2,13 +2,6 @@ DOCKER:
   REGISTRY:
     IMAGE_TAR: registry.tar
     PORT_MAPPING: 5000:5000
-    LOCATION: ../files/
-
-ANSIBLE:
-  DOCKER_DEPENDENCY:
-    - epel-release
-    - python-setuptools
-    - python-pip
 
 YUM_LOCAL_REPO:
   CONFIG:
