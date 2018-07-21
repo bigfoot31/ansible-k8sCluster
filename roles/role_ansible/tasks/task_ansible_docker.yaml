@@ -1,0 +1,16 @@
+- name: install ansible-docker module dependencies
+  yum:
+    name: '{{ item }}'
+    update_cache: no
+    disablerepo: '*'
+    enablerepo: '{{ YUM_LOCAL_REPO.CONFIG.ID }}'
+  with_items:
+    - '{{ ANSIBLE.DOCKER_DEPENDENCY }}'
+  become: yes
+  become_user: root
+
+- name: install docker-py
+  pip:
+    name: docker-py
+  become: yes
+  become_user: root

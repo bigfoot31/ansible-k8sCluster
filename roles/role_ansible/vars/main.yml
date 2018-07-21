@@ -1,0 +1,5 @@
+ANSIBLE:
+  DOCKER_DEPENDENCY:
+    - epel-release
+    - python-setuptools
+    - python-pip
