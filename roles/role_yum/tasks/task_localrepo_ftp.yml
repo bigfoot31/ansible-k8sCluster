@@ -1,0 +1,56 @@
+- name: install ftp server
+  yum:
+    name: '{{ YUM_LOCAL_REPO.SRC }}/{{ item }}'
+    state: present
+    update_cache: no
+  register: ftp_install
+  with_items:
+    - '{{ YUM_LOCAL_REPO.VSFTPD.RPM_DEPENDENCY }}'
+  become: yes
+  become_user: root
+
+- name: open ftp service
+  firewalld:
+    port: 21/tcp
+    permanent: true
+    state: enabled
+  become: yes
+  become_user: root
+
+- name: open port 21 for ftp
+  firewalld:
+    permanent: true
+    state: enabled
+    service: ftp
+  become: yes
+  become_user: root
+
+- name: start ftp server
+  systemd:
+    name: vsftpd
+    state: restarted
+  when: ftp_install.changed
+  become: yes
+  become_user: root
+
+- name: start ftp server
+  systemd:
+    name: vsftpd
+    enabled: yes
+  become: yes
+  become_user: root
+
+- name: restart firewall service
+  systemd:
+    name: firewalld
+    state: restarted
+  when: ftp_install.changed
+  become: yes
+  become_user: root
+
+- name: restart firewall service
+  systemd:
+    name: firewalld
+    enabled: yes
+  become: yes
+  become_user: root
