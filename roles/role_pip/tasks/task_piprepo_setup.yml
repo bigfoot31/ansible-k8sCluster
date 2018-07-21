@@ -2,10 +2,19 @@
   file:
     path: '{{ PIP.REPO.CONF.PATH }}'
     state: directory
-  become: no
+  become: yes
+  become_user: root
 
 - name: pip configuration
   template:
-    dest: '{{ PIP.REPO.CONF.PATH }}'/pip.conf
+    dest: '{{ PIP.REPO.CONF.PATH }}/pip.conf'
     src: '{{ PIP.REPO.CONF.TEMPLATE }}'
-  become: no
+  become: yes
+  become_user: root
+
+- name: copy files to pip repo
+  copy:
+    src: '{{ role_path }}/files/'
+    dest: /root/pip_repo/
+  become: yes
+  become_user: root
