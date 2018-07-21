@@ -1,0 +1,6 @@
+- name: edit hosts
+  template:
+    src: '{{ role_path }}/templates/template_hosts.j2'
+    dest: /etc/hosts
+  become: yes
+  become_user: root
