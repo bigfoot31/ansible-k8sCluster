@@ -1,8 +1,8 @@
 NETWORK:
-  IP_ADDR: 192.168.163.100
+  IP_ADDR: 192.168.163.201
   GATEWAY: 192.168.163.1
   DNS1: 192.168.163.1
   NETMASK: 255.255.255.0
-  HOSTNAME: master
-  INTERFACE: enp0s3
-  CONFIG.PATH: /etc/sysconfig/network-scripts/ifcfg-enp0s3
+  HOSTNAME: admin
+  INTERFACE: enp0s8
+  CONFIG.PATH: /etc/sysconfig/network-scripts/ifcfg-enp0s8

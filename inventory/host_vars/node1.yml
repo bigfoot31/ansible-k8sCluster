@@ -1,1 +1,8 @@
-filename: node1.yml
+NETWORK:
+  IP_ADDR: 192.168.163.201
+  GATEWAY: 192.168.163.1
+  DNS1: 192.168.163.1
+  NETMASK: 255.255.255.0
+  HOSTNAME: admin
+  INTERFACE: enp0s8
+  CONFIG.PATH: /etc/sysconfig/network-scripts/ifcfg-enp0s8
