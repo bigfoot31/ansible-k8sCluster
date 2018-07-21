@@ -1,49 +1,29 @@
+- include_tasks: task_localrepo_ftp.yml
+
 - name: install yum-utils
   yum:
     name: '{{ YUM_LOCAL_REPO.SRC }}/{{ item }}'
+    update_cache: no
   with_items:
     - '{{ YUM_LOCAL_REPO.YUM_UTILS.RPM_DEPENDENCY }}'
   become: yes
   become_user: root
 
-- include_tasks: task_localrepo_config.yml
-
-- name: install ftp server
-  yum:
-    name: '{{ YUM_LOCAL_REPO.SRC }}/{{ item }}'
-    state: present
-  notify: restart ftp
-  become: yes
-  become_user: root
-  with_items:
-    - '{{ YUM_LOCAL_REPO.VSFTPD.RPM_DEPENDENCY }}'
-
 - name: copy localrepo files to ftp folder
   copy:
-    src: '{{ item }}'
+    src: '{{ YUM_LOCAL_REPO.SRC }}/'
     dest: '{{ YUM_LOCAL_REPO.FTP_FOLDER }}'
-    directory_mode: yes
     owner: root
     group: root
     mode: 0744
-  with_fileglob:
-    - '{{ YUM_LOCAL_REPO.SRC }}'
+  register: yum_localrepo
   become: yes
   become_user: root
 
 - name: create repo
   shell:
     chdir: '{{ YUM_LOCAL_REPO.FTP_FOLDER }}'
-    cmd: createrepo .
-  become: yes
-  become_user: root
-
-- name: open port 21 for ftp
-  firewalld:
-    port: 21/tcp
-    permanent: true
-    state: enabled
-    service: ftp
-  notify: restart firewall
+    cmd: createrepo --update .
+  when: yum_localrepo.changed
   become: yes
   become_user: root
