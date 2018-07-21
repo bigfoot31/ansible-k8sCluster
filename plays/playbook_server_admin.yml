@@ -1,11 +1,14 @@
 - hosts: admin
-  connection: ssh
+  connection: local
   gather_facts: no
   vars:
     yum:
-      all: true
-      config: true
       setup: true
-  tasks:
-  - name: hello
-    shell: echo 'hello'
+    docker:
+      registry: true
+  roles:
+    - role_yum
+    - role_network
+    - role_pip
+    - role_ansible
+    - role_docker
