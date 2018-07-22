@@ -1,5 +1,13 @@
-- name: update yum repo
-  shell: yum clean all
+- name: disable swap
+  shell: swapoff -a
+  become: yes
+  become_user: root
+
+- name: edit fstab
+  replace:
+    path: /etc/fstab
+    regexp: '^/dev/mapper/centos-swap'
+    replace: '#/dev/mapper/centos-swap' 
   become: yes
   become_user: root
 
@@ -9,12 +17,27 @@
     state: present
     disablerepo: '*'
     enablerepo: localrepo
-  notify: restart kubelet
   become: yes
   become_user: root
+  register: kubeadm
   with_items:
   - kubeadm
   - cri-tools
+
+- name: restart kubelet service
+  service:
+    name: kubelet
+    state: restarted
+  when: kubeadm.changed
+  become: yes
+  become_user: root
+
+- name: enabled kubelet service
+  service:
+    name: kubelet
+    enabled: yes
+  become: yes
+  become_user: root
 
 - name: disable seLinux
   selinux:
@@ -31,6 +54,13 @@
   with_items:
     - net.bridge.bridge-nf-call-ip6tables
     - net.bridge.bridge-nf-call-iptables 
+  register: iptables
+  become: yes
+  become_user: root
+
+- name: sysctl update
+  command: sysctl --system
+  when: iptables.changed
   become: yes
   become_user: root
 
@@ -42,29 +72,10 @@
   become: yes
   become_user: root
 
-- name: modify ssh timeout
-  template:
-    src: '{{ SSHD.TEMPLATE_FILE }}' 
-    dest: '{{ SSHD.CONFIG.FILE_PATH }}'
-    backup: yes
-  become: yes
-  become_user: root
-  notify: restart sshd
-
-- name: sysctl update
-  command: sysctl --system
-  become: yes
-  become_user: root
-
 - name: disable firewalld
   systemd:
     name: firewalld
     state: stopped
     enabled: no
-  become: yes
-  become_user: root
-
-- name: disable swap
-  shell: swapoff -a
   become: yes
   become_user: root
