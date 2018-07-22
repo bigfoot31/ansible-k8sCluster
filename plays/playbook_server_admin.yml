@@ -6,6 +6,8 @@
       setup: true
     docker:
       registry: true
+    pip:
+      setup: true
   roles:
     - role_yum
     - role_network

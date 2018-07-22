@@ -1,1 +1,4 @@
 - import_tasks: task_piprepo_setup.yml
+  when: 'pip.setup'
+
+- import_tasks: task_piprepo_conf.yml

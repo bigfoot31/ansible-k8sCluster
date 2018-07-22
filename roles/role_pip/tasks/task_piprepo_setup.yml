@@ -1,20 +1,56 @@
-- name: create pip config folder
-  file:
-    path: '{{ PIP.REPO.CONF.PATH }}'
-    state: directory
+- name: install httpd
+  yum:
+    name: httpd
+    update_cache: no
+    disablerepo: '*'
+    enablerepo: localrepo
+  register: httpd_installed
   become: yes
   become_user: root
 
-- name: pip configuration
+- name: conf httpd
   template:
-    dest: '{{ PIP.REPO.CONF.PATH }}/pip.conf'
-    src: '{{ PIP.REPO.CONF.TEMPLATE }}'
+    src: '{{ role_path }}/templates/template_httpd_conf.j2'
+    dest: /etc/httpd/conf.d/vhost.conf
+  register: httpd_conf
   become: yes
   become_user: root
 
 - name: copy files to pip repo
   copy:
     src: '{{ role_path }}/files/'
-    dest: /root/pip_repo/
+    dest: /var/www/html/example.com/
+  register: httpd_new_files
+  become: yes
+  become_user: root
+
+- name: enable httpd
+  systemd:
+    name: httpd
+    enabled: yes
+  become: yes
+  become_user: root
+
+- name: restart httpd
+  systemd:
+    name: httpd
+    state: restarted
+  when: 'httpd_installed.changed or httpd_conf.changed or httpd_new_files.changed'
+  become: yes
+  become_user: root
+
+- name: open port 80
+  firewalld:
+    port: 80/tcp
+    permanent: yes
+    state: enabled
+  become: yes
+  become_user: root
+
+- name: open http service
+  firewalld:
+    service: http
+    permanent: yes
+    state: enabled
   become: yes
   become_user: root

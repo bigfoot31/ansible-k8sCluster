@@ -13,8 +13,12 @@
       reset: false
     yum:
       setup: false
+    pip:
+      setup: false
   roles:
     - role_yum
+    - role_pip
     - role_network
+    - role_ansible
     - role_docker
     - role_kubernetes
