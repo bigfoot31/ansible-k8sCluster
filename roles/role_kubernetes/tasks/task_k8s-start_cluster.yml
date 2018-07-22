@@ -1,5 +1,3 @@
-- meta: flush_handlers
-
 - import_tasks: task_k8s-reset_cluster.yml
 
 - name: check docker images
@@ -7,15 +5,8 @@
   become: yes
   become_user: root
 
-- name: kubeadm config file
-  template:
-    src: '{{ K8s.CONFIG.FILE_PATH }}'
-    dest: /root/hotscan_k8s.yml
-  become: yes
-  become_user: root
-
 - name: start new cluster
-  shell: yes | kubeadm init --config hotscan_k8s.yml
+  shell: yes | kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=192.168.163.100 --kubernetesVersion=v1.10.5
   become: yes
   become_user: root
 
@@ -30,6 +21,14 @@
   become: yes
   become_user: root
 
+- name: change pod-eviction time
+  lineinfile:
+    insertafter: '\s+- kube-controller-manager'
+    line: '    - --pod-eviction-timeout=2s'
+    path: /etc/kubernetes/manifests/kube-controller-manager.yaml
+  become: yes
+  become_user: root
+
 - name: remove flannel file
   file:
     path: /root/flannel.yml
@@ -40,14 +39,6 @@
     src: '{{ K8s.FLANNEL.CONFIG.FILE_PATH }}'
     dest: /root/
     remote_src: no
-  become: yes
-  become_user: root
-
-- name: change pod-eviction time
-  lineinfile:
-    insertafter: '\s+- kube-controller-manager'
-    line: '    - --pod-eviction-timeout=2s'
-    path: /etc/kubernetes/manifests/kube-controller-manager.yaml
   become: yes
   become_user: root
 
