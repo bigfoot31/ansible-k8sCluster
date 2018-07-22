@@ -1,0 +1,23 @@
+- name: modify ssh timeout
+  template:
+    src: '{{ SSHD.TEMPLATE_FILE }}' 
+    dest: '{{ SSHD.CONFIG.FILE_PATH }}'
+    backup: yes
+  register: sshd_config
+  become: yes
+  become_user: root
+
+- name: restart sshd service
+  service:
+    name: sshd
+    state: restarted
+  when: sshd_config.changed
+  become: yes
+  become_user: root
+
+- name: enabled sshd service
+  service:
+    name: sshd
+    enabled: yes
+  become: yes
+  become_user: root

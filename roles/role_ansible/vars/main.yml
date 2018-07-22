@@ -3,3 +3,10 @@ ANSIBLE:
     - epel-release
     - python-setuptools
     - python-pip
+
+SSHD:
+  TEMPLATE_FILE: '{{ role_path }}/templates/template_sshd_config.j2'
+  CONFIG:
+    FILE_PATH: /etc/ssh/sshd_config
+    CLIENTALIVECOUNTMAX: 3
+    CLIENTALIVEINTERVAL: 120
