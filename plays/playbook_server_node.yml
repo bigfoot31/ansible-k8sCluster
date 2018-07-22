@@ -10,10 +10,11 @@
       node: true
       dashboard: false
       cluster_start: false
+      reset: false
     yum:
       setup: false
   roles:
     - role_yum
     - role_network
     - role_docker
-#    - role_kubernetes
+    - role_kubernetes
