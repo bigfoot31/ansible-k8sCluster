@@ -16,3 +16,20 @@
      - '{{ DOCKER.REGISTRY.PORT_MAPPING }}'
   become: yes
   become_user: root
+
+- name: open port 5000
+  firewalld:
+    port: 5000/tcp
+    permanent: yes
+    state: enabled
+  register: port_opened
+  become: yes
+  become_user: root
+
+- name: restart firewall
+  systemd:
+    name: firewalld
+    state: restarted
+  when: 'port_opened.changed'
+  become: yes
+  become_user: root

@@ -44,6 +44,7 @@
     port: 80/tcp
     permanent: yes
     state: enabled
+  register: port_opened
   become: yes
   become_user: root
 
@@ -52,5 +53,14 @@
     service: http
     permanent: yes
     state: enabled
+  register: service_opened
+  become: yes
+  become_user: root
+
+- name: restart firewall
+  systemd:
+    name: firewalld
+    state: restarted
+  when: 'port_opened.changed or service_opened.changed'
   become: yes
   become_user: root

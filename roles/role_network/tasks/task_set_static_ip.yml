@@ -7,10 +7,10 @@
   become: yes
   become_user: root
 
-- name: turn off networkmanager
-  systemd:
-    name: NetworkManager
-    state: stopped
-    enabled: no
-  become: yes
-  become_user: root
+#- name: turn off networkmanager
+#  systemd:
+#    name: NetworkManager
+#    state: stopped
+#    enabled: no
+#  become: yes
+#  become_user: root
