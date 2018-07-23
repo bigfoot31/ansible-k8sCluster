@@ -4,26 +4,20 @@
   gather_facts: no
   vars:
     docker:
-      install: true
-      insecure: true
       registry: false
-      all: false
-    network:
-      hostname: true
-      staticip: true
-      all: true
     k8s:
       addnode: true
-      node: true
-      dashboard: false
-      cluster_start: false
+      node: false
+      start: false
       reset: false
     yum:
-      config: true
       setup: false
-      all: false
+    pip:
+      setup: false
   roles:
     - role_yum
+    - role_pip
     - role_network
+    - role_ansible
     - role_docker
     - role_kubernetes

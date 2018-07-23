@@ -1,4 +1,4 @@
-- hosts: nodes
+- hosts: master
   remote_user: ansible
   connection: ssh
   gather_facts: no
