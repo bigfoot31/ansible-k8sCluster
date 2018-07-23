@@ -1,5 +1,3 @@
-- meta: flush_handlers
-
 - name: reset cluster
   shell: yes | kubeadm reset
   become: yes
@@ -28,7 +26,7 @@
     hidden: yes
   register: files_to_delete
   with_items:
-  - /var/lib/cni/
+#  - /var/lib/cni/
   - /var/lib/kubelet/
   - /etc/cni/
   become: yes
@@ -47,39 +45,39 @@
   with_items: 
   - '{{ files_to_delete.results[0].files }}'
   - '{{ files_to_delete.results[1].files }}'
-  - '{{ files_to_delete.results[2].files }}'
+#  - '{{ files_to_delete.results[2].files }}'
   become: yes
   become_user: root
 
-- name: interface cni0 down
-  net_interface:
-    name: cni0
-    state: absent
-    enabled: False
-  become: yes
-  become_user: root
+#- name: interface cni0 down
+#  net_interface:
+#    name: cni0
+#    state: absent
+#    enabled: False
+#  become: yes
+#  become_user: root
 
-- name: interface flannel.1 down
-  net_interface:
-    name: flannel.1
-    state: absent
-    enabled: False
-  become: yes
-  become_user: root
+#- name: interface flannel.1 down
+#  net_interface:
+#    name: flannel.1
+#    state: absent
+#    enabled: False
+#  become: yes
+#  become_user: root
 
-- name: interface docker0 down
-  net_interface:
-    name: docker0
-    enabled: False
-  become: yes
-  become_user: root
+#- name: interface docker0 down
+#  net_interface:
+#    name: docker0
+#    enabled: False
+#  become: yes
+#  become_user: root
 
-- name: start kubelet
-  systemd:
-    name: kubelet
-    state: started
-  become: yes
-  become_user: root
+#- name: start kubelet
+#  systemd:
+#    name: kubelet
+#    state: started
+#  become: yes
+#  become_user: root
 
 - name: start docker
   systemd:
@@ -87,5 +85,3 @@
     state: started
   become: yes
   become_user: root
-
-

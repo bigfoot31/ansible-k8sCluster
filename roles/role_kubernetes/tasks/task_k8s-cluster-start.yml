@@ -1,12 +1,5 @@
-- import_tasks: task_k8s-reset_cluster.yml
-
-- name: check docker images
-  shell: kubeadm config images pull --config hotscan_k8s.yml
-  become: yes
-  become_user: root
-
 - name: start new cluster
-  shell: yes | kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=192.168.163.100 --kubernetesVersion=v1.10.5
+  shell: yes | kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=131.131.131.100 --kubernetes-version=v1.10.5
   become: yes
   become_user: root
 

@@ -79,3 +79,24 @@
     enabled: no
   become: yes
   become_user: root
+
+- name: pull docker images
+  docker_image:
+    name: '131.131.131.201:5000/{{ item }}'
+    state: present
+  with_items: '{{ K8s.MASTER.IMAGES }}'
+  register: docker_image
+  become: yes
+  become_user: root
+
+- name: tag docker images
+  docker_image:
+    name: '131.131.131.201:5000/{{ item }}'
+    state: present
+    repository: '{{ K8s.MASTER.REPOSITORY }}/{{ item }}'
+    pull: no
+    push: no
+  with_items: '{{ K8s.MASTER.IMAGES }}'
+  register: docker_image
+  become: yes
+  become_user: root
