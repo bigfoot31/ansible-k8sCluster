@@ -1,29 +1,18 @@
-- hosts: master
+- hosts: node3
   remote_user: ansible
   connection: ssh
   gather_facts: no
   vars:
     docker:
-      install: false
-      insecure: false
       registry: false
-      all: false
-    network:
-      hostname: false
-      staticip: false
-      all: false
     k8s:
       addnode: false
       node: false
-      dashboard: false
-      cluster_start: false
+      start: false
       reset: true
     yum:
-      config: false
       setup: false
-      all: false
+    pip:
+      setup: false
   roles:
-    - role_yum
-    - role_network
-    - role_docker
     - role_kubernetes
