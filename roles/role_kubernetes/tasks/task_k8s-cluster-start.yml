@@ -3,6 +3,14 @@
   become: yes
   become_user: root
 
+- name: create .kube folder
+  file:
+    path: /root/.kube
+    state: directory
+    mode: 0755
+  become: yes
+  become_user: root
+
 - name: copy admin conf file
   copy:
     src: /etc/kubernetes/admin.conf
