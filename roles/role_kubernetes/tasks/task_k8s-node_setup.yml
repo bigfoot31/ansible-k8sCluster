@@ -82,7 +82,7 @@
 
 - name: pull docker images
   docker_image:
-    name: '131.131.131.201:5000/{{ item }}'
+    name: '{{ DOCKER.REGISTRY.IP }}/{{ item }}'
     state: present
   with_items: '{{ K8s.MASTER.IMAGES }}'
   register: docker_image
@@ -91,7 +91,7 @@
 
 - name: tag docker images
   docker_image:
-    name: '131.131.131.201:5000/{{ item }}'
+    name: '{{ DOCKER.REGISTRY.IP }}/{{ item }}'
     state: present
     repository: '{{ K8s.MASTER.REPOSITORY }}/{{ item }}'
     pull: no

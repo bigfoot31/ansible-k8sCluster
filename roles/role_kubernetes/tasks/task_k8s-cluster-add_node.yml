@@ -13,6 +13,6 @@
   become_user: root
  
 - name: add node to master
-  shell: kubeadm join 131.131.131.100:6443 --token {{ TOKEN.stdout }}  --discovery-token-ca-cert-hash sha256:{{ HASH.stdout }} --ignore-preflight-errors=cri
+  shell: kubeadm join {{ NETWORK.IP_RANGE }}.100:6443 --token {{ TOKEN.stdout }}  --discovery-token-ca-cert-hash sha256:{{ HASH.stdout }} --ignore-preflight-errors=cri
   become: yes
   become_user: root

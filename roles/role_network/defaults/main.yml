@@ -1,8 +1,10 @@
 NETWORK:
+  IP_RANGE: 192.168.163
   IP_ADDR:
   GATEWAY:
   DNS1:
   NETMASK: 255.255.255.0
   HOSTNAME:
   INTERFACE: em1
-  CONFIG.PATH: /etc/sysconfig/network-scripts/ifcfg-em1
+  CONFIG:
+    PATH: /etc/sysconfig/network-scripts/ifcfg-em1

@@ -1,3 +1,4 @@
-NEiTWORK:
+NETWORK:
   ONBOOT: yes
-  CONFIG.TEMPLATE: ../templates/template_staticip.j2
+  CONFIG:
+    TEMPLATE: ../templates/template_staticip.j2

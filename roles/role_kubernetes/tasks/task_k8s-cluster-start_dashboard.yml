@@ -40,6 +40,6 @@
   failed_when: kubeproxy.rc in []
 
 - name: start kubeproxy
-  shell: nohup kubectl proxy --address 131.131.131.100 --port=8001 --accept-hosts='^*$' </dev/null >/dev/null 2>&1 &
+  shell: nohup kubectl proxy --address {{ NETWORK.IP_RANGE }}.100 --port=8001 --accept-hosts='^*$' </dev/null >/dev/null 2>&1 &
   become: yes
   become_user: root
