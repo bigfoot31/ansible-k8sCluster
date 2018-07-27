@@ -1,0 +1,10 @@
+- hosts: admin
+  connection: ssh
+  gather_facts: no
+  vars:
+    ibmmq:
+      start: true
+      install: false
+      create: false
+  roles:
+  - role_ibmmq

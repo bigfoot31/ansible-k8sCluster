@@ -1,22 +1,21 @@
 - name: start queue manager
   shell:
     chdir: '{{ IBMMQ.BIN }}'
-    cmd: strmqm '{{ IBMMQ.QMGR.NAME }}'
+    cmd: strmqm {{ IBMMQ.QMGR.NAME }}
   become: yes
   become_user: mqm
 
 - name: run the queue
   shell:
     chdir: '{{ IBMMQ.BIN }}'
-    cmd: nohup runmqlsr -m '{{ IBMMQ.QMGR.NAME }}' -t tcp -p '{{ IBMMQ.QMGR.PORT }}' &
+    cmd: nohup runmqlsr -m {{ IBMMQ.QMGR.NAME }} -t tcp -p {{ IBMMQ.QMGR.PORT }} &
   become: yes
   become_user: mqm
 
 - name: open port  '{{ IBMMQ.QMGR.PORT }}' for ftp
   firewalld:
-    port: '{{ IBMMQ.QMGR.PORT }}'/tcp
+    port: "{{ IBMMQ.QMGR.PORT }}/tcp"
     permanent: no
     state: enabled
-    service: ftp
   become: yes
   become_user: root

@@ -1,6 +1,6 @@
 - import_tasks: task_ibmmq_installation.yaml
-  when: {{ tasks.ibmmq.install }} || {{ tasks.ibmmq.all }}
+  when: ibmmq.install
 - import_tasks: task_ibmmq_createqueue.yaml
-  when: {{ tasks.ibmmq.create }} || {{ tasks.ibmmq.all }}
+  when: ibmmq.create
 - import_tasks: task_ibmmq_startqmgr.yml
-  when: {{ tasks.ibmmq.start }} || {{ tasks.ibmmq.all }}
+  when: ibmmq.start
