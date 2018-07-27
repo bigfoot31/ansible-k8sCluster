@@ -36,6 +36,7 @@
     register: files_to_delete
     with_items:
     - /var/lib/kubelet/
+    - /var/lib/cni/flannel/
     - /etc/cni/
     become: yes
     become_user: root
@@ -53,6 +54,7 @@
     with_items: 
     - '{{ files_to_delete.results[0].files }}'
     - '{{ files_to_delete.results[1].files }}'
+    - '{{ files_to_delete.results[2].files }}'
     become: yes
     become_user: root
 
