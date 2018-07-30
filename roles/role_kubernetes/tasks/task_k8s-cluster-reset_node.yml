@@ -37,6 +37,7 @@
     with_items:
     - /var/lib/kubelet/
     - /var/lib/cni/flannel/
+    - /var/lib/cni/networks/cbr0/
     - /etc/cni/
     become: yes
     become_user: root
@@ -55,6 +56,15 @@
     - '{{ files_to_delete.results[0].files }}'
     - '{{ files_to_delete.results[1].files }}'
     - '{{ files_to_delete.results[2].files }}'
+    - '{{ files_to_delete.results[3].files }}'
+    become: yes
+    become_user: root
+
+  - name: interface cni0 down
+    net_interface:
+      name: cni0
+      state: absent
+      enabled: False
     become: yes
     become_user: root
 
