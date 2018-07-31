@@ -1,0 +1,18 @@
+K8s:
+  MASTER:
+    IP: 192.168.163.100
+    PORT: 6443
+  DASHBOARD:
+    PORT: 8001
+  NETWORK_FILE_PATH:
+    - /var/lib/kubelet/
+    - /var/lib/cni/flannel/
+    - /var/lib/cni/networks/cbr0/
+    - /etc/cni/
+  DASHBOARD_MANIFESTS:
+    - influxdb.yaml
+    - heapster.yaml
+    - grafana.yaml
+    - heapster-rbac.yaml
+    - dashboard-creation.yml
+    - dashboard-admin.yaml

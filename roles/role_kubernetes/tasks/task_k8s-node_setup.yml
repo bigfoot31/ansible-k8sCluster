@@ -19,7 +19,7 @@
     enablerepo: localrepo
   become: yes
   become_user: root
-  register: kubeadm
+  register: REGISTER_KUBEADM
   with_items:
   - kubeadm
   - cri-tools
@@ -28,7 +28,7 @@
   service:
     name: kubelet
     state: restarted
-  when: kubeadm.changed
+  when: REGISTER_KUBEADM.changed
   become: yes
   become_user: root
 
@@ -54,13 +54,13 @@
   with_items:
     - net.bridge.bridge-nf-call-ip6tables
     - net.bridge.bridge-nf-call-iptables 
-  register: iptables
+  register: REGISTER_IPTABLES
   become: yes
   become_user: root
 
 - name: sysctl update
   command: sysctl --system
-  when: iptables.changed
+  when: REGISTER_IPTABLES.changed
   become: yes
   become_user: root
 
@@ -85,7 +85,7 @@
     name: '{{ DOCKER.REGISTRY.IP }}/{{ item }}'
     state: present
   with_items: '{{ K8s.MASTER.IMAGES }}'
-  register: docker_image
+  register: REGISTER_DOCKER_IMAGES_PULLED
   become: yes
   become_user: root
 
@@ -97,6 +97,6 @@
     pull: no
     push: no
   with_items: '{{ K8s.MASTER.IMAGES }}'
-  register: docker_image
+  register: REGISTER_DOCKER_IMAGES_PULLED
   become: yes
   become_user: root

@@ -1,7 +1,7 @@
 - name: Check that the kubeadm exists
   stat:
     path: /bin/kubeadm
-  register: stat_result
+  register: REGISTER_ISKUBEADM
   become: yes
   become_user: root
 
@@ -33,38 +33,25 @@
       recurse: true
       file_type: any
       hidden: yes
-    register: files_to_delete
-    with_items:
-    - /var/lib/kubelet/
-    - /var/lib/cni/flannel/
-    - /var/lib/cni/networks/cbr0/
-    - /etc/cni/
+    register: REGISTER_files_to_delete
+    with_items: '{{ K8s.NETWORK_FILE_PATH }}'
     become: yes
     become_user: root
-
-
-  - name: Display all variables/facts known for a host
-    debug:
-      var: files_to_delete
-      verbosity: 4
 
   - name: delete network files
     file:
       path: '{{ item.path }}'
       state: absent
-    with_items: 
-    - '{{ files_to_delete.results[0].files }}'
-    - '{{ files_to_delete.results[1].files }}'
-    - '{{ files_to_delete.results[2].files }}'
-    - '{{ files_to_delete.results[3].files }}'
+    with_items:
+    - '{{ REGISTER_files_to_delete.results[0].files }}'
+    - '{{ REGISTER_files_to_delete.results[1].files }}'
+    - '{{ REGISTER_files_to_delete.results[2].files }}'
+    - '{{ REGISTER_files_to_delete.results[3].files }}'
     become: yes
     become_user: root
 
   - name: interface cni0 down
-    net_interface:
-      name: cni0
-      state: absent
-      enabled: False
+    shell: ip link delete cni0
     become: yes
     become_user: root
 
@@ -75,4 +62,4 @@
     become: yes
     become_user: root
 
-  when: 'stat_result.stat.exists == True'
+  when: 'REGISTER_ISKUBEADM.stat.exists == True'

@@ -1,18 +1,18 @@
 - name: get current bootstrap token
   shell: kubeadm token list | grep 'kubeadm init' | awk '{ print $1 }'
-  register: TOKEN
+  register: REGISTER_TOKEN
   delegate_to: master
   become: yes
   become_user: root
 
 - name: get cert
   shell: openssl x509 -in /etc/kubernetes/pki/ca.crt -noout -pubkey | openssl rsa -pubin -outform DER 2>/dev/null | sha256sum | awk '{ print $1 }'
-  register: HASH
+  register: REGISTER_HASH
   delegate_to: master
   become: yes
   become_user: root
  
 - name: add node to master
-  shell: kubeadm join {{ NETWORK.IP_RANGE }}.100:6443 --token {{ TOKEN.stdout }}  --discovery-token-ca-cert-hash sha256:{{ HASH.stdout }} --ignore-preflight-errors=cri
+  shell: kubeadm join {{ K8s.MASTER.IP }}:{{ K8s.MASTER.PORT }} --token {{ REGISTER_TOKEN.stdout }}  --discovery-token-ca-cert-hash sha256:{{ REGISTER_HASH.stdout }} --ignore-preflight-errors=cri
   become: yes
   become_user: root

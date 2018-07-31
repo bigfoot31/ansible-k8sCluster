@@ -5,23 +5,11 @@
     remote_src: false
   become: yes
   become_user: root
-  with_items:
-    - influxdb.yaml
-    - heapster.yaml
-    - grafana.yaml
-    - heapster-rbac.yaml
-    - dashboard-creation.yml
-    - dashboard-admin.yaml
+  with_items: '{{ K8s.DASHBOARD_MANIFESTS }}'
 
 - name: start dashboard
   shell: kubectl create -f ~/temp/{{ item }}
-  with_items:
-    - influxdb.yaml
-    - heapster.yaml
-    - grafana.yaml
-    - heapster-rbac.yaml
-    - dashboard-creation.yml
-    - dashboard-admin.yaml
+  with_items: '{{ K8s.DASHBOARD_MANIFESTS }}'
   become: yes
   become_user: root
 
@@ -40,6 +28,15 @@
   failed_when: kubeproxy.rc in []
 
 - name: start kubeproxy
-  shell: nohup kubectl proxy --address {{ NETWORK.IP_RANGE }}.100 --port=8001 --accept-hosts='^*$' </dev/null >/dev/null 2>&1 &
+  shell: (nohup kubectl proxy --address {{ K8s.MASTER.IP }} --port={{ K8s.DASHBOARD.PORT }} --accept-hosts='^*$' 1>/dev/null 2>&1) &
+  become: yes
+  become_user: root
+
+- name: check if all pods in kube-system started
+  shell: kubectl get pods -n kube-system | grep -i "Running" | wc -l
+  register: REGISTER_WATCH_RESULT
+  until: REGISTER_WATCH_RESULT.stdout == "11"
+  retries: 6
+  delay: 10
   become: yes
   become_user: root

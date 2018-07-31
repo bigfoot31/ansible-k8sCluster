@@ -1,5 +1,5 @@
 - name: start new cluster
-  shell: yes | kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address={{ NETWORK.IP_RANGE }}.100 --kubernetes-version=v1.10.5
+  shell: yes | kubeadm init --pod-network-cidr={{ K8s.PODS.CIDR }} --apiserver-advertise-address={{ K8s.MASTER.IP }} --kubernetes-version={{ K8s.VERSION }}
   become: yes
   become_user: root
 

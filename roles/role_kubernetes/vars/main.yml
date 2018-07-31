@@ -24,10 +24,3 @@ K8s:
   PODS:
     CIDR: 10.244.0.0/16
   VERSION: v1.10.5
-
-SSHD:
-  TEMPLATE_FILE: '{{ role_path }}/templates/template_sshd_config.j2'
-  CONFIG:
-    FILE_PATH: /etc/ssh/sshd_config
-    CLIENTALIVECOUNTMAX: 3
-    CLIENTALIVEINTERVAL: 120
