@@ -40,3 +40,14 @@
   delay: 10
   become: yes
   become_user: root
+
+- name: if successful show running pods
+  shell: kubectl get pods -n kube-system
+  register: REGISTER_WATCH_RESULT
+  become: yes
+  become_user: root
+
+- name: show
+  debug:
+    var: REGISTER_WATCH_RESULT.stdout_lines
+    verbosity: 0
