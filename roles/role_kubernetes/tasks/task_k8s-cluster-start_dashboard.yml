@@ -28,9 +28,7 @@
   failed_when: kubeproxy.rc in []
 
 - name: start kubeproxy
-  shell: (nohup kubectl proxy --address {{ K8s.MASTER.IP }} --port={{ K8s.DASHBOARD.PORT }} --accept-hosts='^*$' 1>/dev/null 2>&1) &
-  become: yes
-  become_user: root
+  shell: (nohup sudo kubectl proxy --address {{ K8s.MASTER.IP }} --port={{ K8s.DASHBOARD.PORT }} --accept-hosts='^*$' 1>/dev/null 2>&1) &
 
 - name: check if all pods in kube-system started
   shell: kubectl get pods -n kube-system | grep -i "Running" | wc -l
