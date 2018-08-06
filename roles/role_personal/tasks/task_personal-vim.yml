@@ -1,0 +1,27 @@
+- name: remove yum cache
+  file:
+    path: /var/cache/yum/
+    state: absent
+  become: yes
+  become_user: root
+
+- name: install vim and tree
+  yum:
+    name: '{{ item }}'
+    update_cache: no
+    disablerepo: '*'
+    enablerepo: localrepo
+  with_items:
+  - vim
+  - tree
+  become: yes
+  become_user: root
+
+- name: copy bashrc to server
+  copy:
+    src: '{{ role_path }}/files/{{ item }}'
+    dest: ~/
+    remote_src: false
+  with_items:
+  - .bashrc
+  - .vim
