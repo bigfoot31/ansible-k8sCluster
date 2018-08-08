@@ -50,8 +50,16 @@
     become: yes
     become_user: root
 
+  - name: is interface cni0 present
+    shell: ip link show | awk -F[:] '{print $2}' | grep -vE '^[0-9]{2}' | grep 'cni0'
+    register: REGISTER_iscni0
+    ignore_errors: yes
+    become: yes
+    become_user: root
+
   - name: interface cni0 down
     shell: ip link delete cni0
+    when: 'REGISTER_iscni0.rc == 0'
     become: yes
     become_user: root
 
