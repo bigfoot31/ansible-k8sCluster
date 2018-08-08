@@ -8,9 +8,13 @@
       registry: true
     pip:
       setup: true
+    ntp:
+      server: true
+      client: false
   roles:
     - role_yum
     - role_network
     - role_pip
     - role_ansible
     - role_docker
+    - role_ntp
