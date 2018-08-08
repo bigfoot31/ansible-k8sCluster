@@ -1,0 +1,4 @@
+- include_tasks: task_ntp-configure-server.yml
+  when: ntp.server
+- include_tasks: task_ntp-configure-client.yml
+  when: ntp.client

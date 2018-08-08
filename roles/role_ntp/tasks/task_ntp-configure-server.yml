@@ -1,0 +1,25 @@
+- name: install ntp
+  yum:
+    name: ntp
+    state: present
+    disablerepo: '*'
+    enablerepo: localrepo
+  become: yes
+  become_user: root
+
+- name: configure ntp
+  template:
+    src: '{{ role_path }}/files/ntp-server.conf'
+    dest: /etc/ntp.conf
+    backup: yes
+  become: yes
+  become_user: root
+
+- name: start ntp service
+  systemd:
+    name: ntpd
+    enabled: yes
+    state: started
+  become: yes
+  become_user: root
+
