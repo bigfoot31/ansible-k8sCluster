@@ -1,0 +1,31 @@
+
+- name: stop listener
+  shell:
+    cmd: lsnrctl stop
+    chdir: '{{ oracle.home }}'
+  environment: '{{ oracle.environment }}'
+  become: yes
+  become_user: oracle
+
+- name: copy files
+  copy:
+    src: '{{ role_path }}/files/{{ oracle.shutdown_script }}'
+    dest: '{{ oracle.home }}/'
+    remote_src: no
+  become: yes
+  become_user: root
+
+- name: shutdown database
+  shell:
+    cmd: sqlplus / as sysdba @'{{ oracle.shutdown_script }}'
+    chdir: '{{ oracle.home }}'
+  environment: '{{ oracle.environment }}'
+  become: yes
+  become_user: oracle
+
+- name: cleanup
+  file:
+    path: '{{ oracle.home }}/{{ oracle.shutdown_script }}'
+    state: absent
+  become: yes
+  become_user: oracle

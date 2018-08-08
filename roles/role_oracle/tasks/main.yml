@@ -1,0 +1,5 @@
+- include_tasks: task_oracle-shutdown.yml
+  when: oracle.shutdown
+
+- include_tasks: task_oracle-startup.yml
+  when: oracle.startup

@@ -1,0 +1,32 @@
+
+
+- name: copy files
+  copy:
+    src: '{{ role_path }}/files/{{ oracle.startup_script }}'
+    dest: '{{ oracle.home }}/'
+    remote_src: no
+  become: yes
+  become_user: root
+
+- name: start oracle database
+  shell:
+    cmd: sqlplus / as sysdba @'{{ oracle.startup_script }}'
+    chdir: '{{ oracle.home }}'
+  environment: '{{ oracle.environment }}'
+  become: yes
+  become_user: oracle
+
+- name: start listener
+  shell:
+    cmd: lsnrctl start
+    chdir: '{{ oracle.home }}'
+  environment: '{{ oracle.environment }}'
+  become: yes
+  become_user: oracle
+
+- name: cleanup
+  file:
+    path: '{{ oracle.home }}/{{ oracle.startup_script }}'
+    state: absent
+  become: yes
+  become_user: oracle

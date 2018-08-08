@@ -6,5 +6,9 @@
       start: true
       install: false
       create: false
+    oracle:
+      shutdown: false
+      startup: true
   roles:
+  - role_oracle
   - role_ibmmq
