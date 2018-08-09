@@ -15,6 +15,24 @@
   become: yes
   become_user: root
 
+- name: open firewall for ntp
+  firewalld:
+    service: ntp
+    permanent: yes
+    zone: public
+    state: enabled
+  become: yes
+  become_user: root
+
+- name: open port 123 for ntp
+  firewalld:
+    port: 123/udp
+    zone: public
+    permanent: yes
+    state: enabled
+  become: yes
+  become_user: root
+
 - name: start ntp service
   systemd:
     name: ntpd
