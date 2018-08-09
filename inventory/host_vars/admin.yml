@@ -1,6 +1,10 @@
 NETWORK:
-  IP_ADDR: 192.168.163.201
+  IP_ADDR: 131.131.131.201
   HOSTNAME: admin
-  INTERFACE: enp0s8
+  INTERFACE: em1
   CONFIG:
-    PATH: /etc/sysconfig/network-scripts/ifcfg-enp0s8
+    PATH: /etc/sysconfig/network-scripts/ifcfg-em1
+
+ntp:
+  server: true
+  client: false
