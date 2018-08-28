@@ -16,3 +16,6 @@ K8s:
     - heapster-rbac.yaml
     - dashboard-creation.yml
     - dashboard-admin.yaml
+  TILLER_MANIFESTS:
+    - tiller-serviceaccount.yml
+    - tiller-clusterrolebinding.yml

@@ -1,0 +1,27 @@
+
+- name: copy tiller files to server
+  copy:
+    src: '{{ role_path }}/files/{{ item }}'
+    dest: ~/temp/
+    remote_src: false
+  become: yes
+  become_user: root
+  with_items: '{{ K8s.TILLER_MANIFESTS }}'
+
+- name: create tiller resources
+  shell: kubectl create -f ~/temp/{{ item }}
+  with_items: '{{ K8s.TILLER_MANIFESTS }}'
+  become: yes
+  become_user: root
+
+- name: cleanup master
+  file:
+    path: ~/temp
+    state: absent
+  become: yes
+  become_user: root
+
+- name: helm init
+  shell: helm init --service-account tiller --tiller-image '{{ DOCKER.REGISTRY.IP }}/{{ K8s.TILLER.IMAGE }}' --skip-refresh
+  become: yes
+  become_user: root

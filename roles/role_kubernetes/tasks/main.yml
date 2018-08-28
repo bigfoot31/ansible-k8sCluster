@@ -6,6 +6,7 @@
     - include_tasks: task_k8s-node_setup.yml
     - include_tasks: task_k8s-cluster-start.yml
     - include_tasks: task_k8s-cluster-start_dashboard.yml
+    - include_tasks: task_k8s-cluster-start_tiller.yml
   when: k8s.start
 
 - block:
