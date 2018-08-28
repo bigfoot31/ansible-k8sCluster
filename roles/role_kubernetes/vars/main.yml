@@ -21,6 +21,11 @@ K8s:
     - pause-amd64:3.1
     - heapster-influxdb-amd64:v1.3.3
     - heapster-grafana-amd64:v4.4.3
+  NODE:
+    IMAGES:
+    - kube-proxy-amd64:v1.10.5
+    - coreos/flannel:v0.10.0-amd64
+    - pause-amd64:3.1
   PODS:
     CIDR: 10.244.0.0/16
   VERSION: v1.10.5

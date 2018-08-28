@@ -80,24 +80,48 @@
   become: yes
   become_user: root
 
-- name: pull docker images
-  docker_image:
-    name: '{{ DOCKER.REGISTRY.IP }}/{{ item }}'
-    state: present
-  with_items: '{{ K8s.MASTER.IMAGES }}'
-  register: REGISTER_DOCKER_IMAGES_PULLED
-  become: yes
-  become_user: root
+- block:
+  - name: pull docker images
+    docker_image:
+      name: '{{ DOCKER.REGISTRY.IP }}/{{ item }}'
+      state: present
+    with_items: '{{ K8s.NODE.IMAGES }}'
+    register: REGISTER_DOCKER_IMAGES_PULLED
+    become: yes
+    become_user: root
 
-- name: tag docker images
-  docker_image:
-    name: '{{ DOCKER.REGISTRY.IP }}/{{ item }}'
-    state: present
-    repository: '{{ K8s.MASTER.REPOSITORY }}/{{ item }}'
-    pull: no
-    push: no
-  with_items: '{{ K8s.MASTER.IMAGES }}'
-  register: REGISTER_DOCKER_IMAGES_PULLED
-  become: yes
-  become_user: root
+  - name: tag docker images
+    docker_image:
+      name: '{{ DOCKER.REGISTRY.IP }}/{{ item }}'
+      state: present
+      repository: '{{ K8s.MASTER.REPOSITORY }}/{{ item }}'
+      pull: no
+      push: no
+    with_items: '{{ K8s.NODE.IMAGES }}'
+    register: REGISTER_DOCKER_IMAGES_PULLED
+    become: yes
+    become_user: root
+  when: "ismaster is not defined"
 
+- block:
+  - name: pull docker images
+    docker_image:
+      name: '{{ DOCKER.REGISTRY.IP }}/{{ item }}'
+      state: present
+    with_items: '{{ K8s.MASTER.IMAGES }}'
+    register: REGISTER_DOCKER_IMAGES_PULLED
+    become: yes
+    become_user: root
+
+  - name: tag docker images
+    docker_image:
+      name: '{{ DOCKER.REGISTRY.IP }}/{{ item }}'
+      state: present
+      repository: '{{ K8s.MASTER.REPOSITORY }}/{{ item }}'
+      pull: no
+      push: no
+    with_items: '{{ K8s.MASTER.IMAGES }}'
+    register: REGISTER_DOCKER_IMAGES_PULLED
+    become: yes
+    become_user: root
+  when: "ismaster is defined"
