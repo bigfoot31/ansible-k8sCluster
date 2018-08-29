@@ -36,6 +36,7 @@
   until: REGISTER_WATCH_RESULT.stdout == "11"
   retries: 6
   delay: 10
+  failed_when: REGISTER_WATCH_RESULT.rc in []
   become: yes
   become_user: root
 
